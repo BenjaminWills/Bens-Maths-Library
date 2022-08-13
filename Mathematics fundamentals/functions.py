@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.style.use('dark_background')
 
 class Functions:
     def line(self, x, gradient, intercept):
@@ -38,9 +39,29 @@ class Functions:
             return 0
         return self.sinh(x) / self.cosh(x)
 
+    def sin(self, x, frequency):
+        return np.sin(x * frequency)
+
+    def get_visualisation(self, function, start, end, steps):
+        if start >= end:
+            return None
+        plotting_space = np.linspace(start, end, steps)
+        fig, ax = plt.subplots()
+        ax.plot(plotting_space, function(plotting_space))
+        ax.set_aspect('auto')
+        ax.grid(True, which='both',linestyle=':')
+        ax.spines['left'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.yaxis.tick_left()
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['top'].set_color('none')
+        ax.xaxis.tick_bottom()
+        plt.show()
+
 
 func_space = Functions()
 
-space = np.linspace(-5, 5, 100)
-plt.plot(space, func_space.step(space, 0))
-plt.show()
+
+def sigmoid(x):
+    return func_space.sigmoid(x)
+func_space.get_visualisation(sigmoid, -5, 5, 100)
