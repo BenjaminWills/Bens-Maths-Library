@@ -42,11 +42,3 @@ class Functions:
     def sin(self, x, frequency):
         return np.sin(x * frequency)
 
-
-
-func_space = Functions()
-
-
-def sigmoid(x):
-    return func_space.sigmoid(x)
-func_space.get_visualisation(sigmoid, -5, 5, 100)
