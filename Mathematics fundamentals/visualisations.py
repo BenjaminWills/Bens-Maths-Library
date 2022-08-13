@@ -1,3 +1,6 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 class Visualisation:
     def get_function_visualisation(self, function, start, end, steps):
         if start >= end:

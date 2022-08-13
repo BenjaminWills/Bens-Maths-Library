@@ -14,12 +14,12 @@ class Functions:
             output += coefficient * x ** (degree - index)
         return output
 
-    def reciprocal(self, x, horizontal_shift, vertical_shift):
+    def reciprocal(self, x, horizontal_shift = 0, vertical_shift = 0):
         if x.any() == 0:
             return 0
         return 1 / (x - horizontal_shift) + vertical_shift
 
-    def step(self, x, horizontal_shift):
+    def step(self, x, horizontal_shift = 0):
         if x.any() == horizontal_shift:
             return 1
         else:
@@ -38,7 +38,12 @@ class Functions:
         if x.any() == 0:
             return 0
         return self.sinh(x) / self.cosh(x)
+    
+    def bell_curve(self,x, stretch = 1, horizontal_shift = 0):
+        return stretch * np.exp(- (x+horizontal_shift) ** 2)
 
-    def sin(self, x, frequency):
+    def sin(self, x, frequency = 1):
         return np.sin(x * frequency)
 
+    def cos(self,x,frequency = 1):
+        return np.cos(x * frequency)
