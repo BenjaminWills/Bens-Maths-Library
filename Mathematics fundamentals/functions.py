@@ -21,4 +21,3 @@ space = np.linspace(-5,5,100)
 plt.plot(space,func_space.reciprocal(space,0,0))
 plt.show()
 
-# commit
