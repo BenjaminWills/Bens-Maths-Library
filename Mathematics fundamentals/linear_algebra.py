@@ -1,44 +1,66 @@
 class Linalg:
-    def get_empty_row(self,length):
+    def get_empty_row(self, length):
         row = []
         for i in range(length):
             row.append(0)
         return row
 
-    def get_empty_matrix(self,rows,columns):
+    def get_empty_matrix(self, rows, columns):
         matrix = []
         for i in range(rows):
             matrix.append(self.get_empty_row(columns))
         return matrix
-        
-    def get_transpose(self,mat1):
+
+    def get_transpose(self, mat1):
+        """
+        Will find the transpose of any matrix inputted. i.e will make the rows into columns and visa
+        versa. The element at index [i,j] goes to [j,i] for all i in rows and j in columns.
+        """
         rows = len(mat1)
         columns = len(mat1[0])
-        transpose = self.get_empty_matrix(columns,rows)
+        transpose = self.get_empty_matrix(columns, rows)
         for i in range(rows):
             for j in range(columns):
                 transpose[j][i] = mat1[i][j]
         return transpose
 
-    def matrix_multiply(self,mat1,mat2):
+    def get_dot_product(self, vector1, vector2):
+        v_1_length = len(vector1)
+        v_2_length = len(vector2)
+        if v_1_length != v_2_length:
+            return f"""Error! Vector 1 has length {v_1_length}, and vector 2 has length {v_2_length}. 
+            These must be equal."""
+        sum = 0
+        for i in range(v_2_length):
+            sum += vector1[i] * vector2[i]
+        return sum
+
+    def matrix_multiply(self, mat1, mat2):
         """
         Matrix multiplication works by multiplying rows by columns pairwise. Thus if mat1
         does not have the same number of rows as mat2 does columns, we cannot multiply them.
 
         Note: mat1 will be a list of lists to simulate a matrix:
-            mat1 = [ [1,2,3] 
+            mat1 = [ [1,2,3]
                      [4,5,6]
                      [7,8,9]   ] 3x3 matrix.
         For example.
 
-        In essence we can only multiply matrices with dimensions k x n and m x k, the resulting matrix
-        will have dimension n x m.
+        In essence we can only multiply matrices with dimensions n x k and k x m, the resulting matrix
+        will have dimension n x m. The plan is to transpose mat2 and then simply make the [i,j] element
+        of the new matrix equal to the dot product of the i'th and j'th rows.
         """
         mat1_rows = len(mat1)
+        mat1_columns = len(mat1[0])
+        mat2_rows = len(mat2)
         mat2_columns = len(mat2[0])
-        if mat1_rows != mat2_columns:
-            return f"Error, matrix one has {mat1_rows}  rows and matrix two has {mat2_columns} columns."
-        pass
-
-
-
+        if mat1_columns != mat2_rows:
+            return f"Error! Matrix one has {mat1_columns}  rows and matrix two has {mat2_rows} columns."
+        mat2_transpose = self.get_transpose(mat2)
+        multiplied_matrix = self.get_empty_matrix(mat1_rows, mat2_columns)
+        for row_index, row1 in enumerate(mat1):
+            for column_index, row2 in enumerate(mat2_transpose):
+                multiplied_matrix[row_index][column_index] = self.get_dot_product(
+                    row1, row2
+                )
+        return multiplied_matrix
