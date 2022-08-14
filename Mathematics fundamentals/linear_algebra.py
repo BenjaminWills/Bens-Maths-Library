@@ -1,3 +1,5 @@
+import numpy as np
+
 class Linalg:
     def get_empty_row(self, length):
         row = []
@@ -73,3 +75,26 @@ class Linalg:
         for element in new_co_ordinate:
             output.append(element[0])
         return output
+
+    def transform_conic_function(self,x,function,matrix):
+        # One to many functions require special attention.
+        outputs = []
+        for co_ordinates in function(x):
+            co_ordinate = [[x],[co_ordinates]]
+            new_co_ordinate = self.matrix_multiply(matrix,co_ordinate)
+            outputs.append([new_co_ordinate[0],new_co_ordinate[1]])
+        return outputs
+
+    def get_2_d_determinant(self,matrix):
+        """
+        The n x n dimensional determinant can be found recursively from the root determinant,
+        the 2 x 2 determinant.
+        """
+        determinant = matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
+        return determinant
+
+    def get_determinant(self,matrix):
+        return np.linalg.det(matrix)
+
+    def get_inverted_matrix(self, matrix):
+        return np.linalg.inv(matrix)
