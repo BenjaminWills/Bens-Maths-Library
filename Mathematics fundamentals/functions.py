@@ -50,3 +50,16 @@ class Functions:
     
     def tan(self,x,frequency = 1):
         return np.tan(x/(2*np.pi) * frequency)
+
+    def exp(self,x):
+        return np.exp(x)
+    
+    def ln(self,x):
+        return np.log(x)
+
+    def log_base_n(self,x,n):
+        return np.log(x)/np.log(n)
+
+    def circle(self,x,radius,centre_x,centre_y):
+        y_co_ordinate = centre_y + np.sqrt(radius ** 2 - (x-centre_x) ** 2)
+        return [-y_co_ordinate,y_co_ordinate]
