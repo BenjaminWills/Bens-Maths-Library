@@ -1,11 +1,23 @@
 class Linalg:
-    def transpose(self,mat1):
-        transpose = mat1
+    def get_empty_row(self,length):
+        row = []
+        for i in range(length):
+            row.append(0)
+        return row
+
+    def get_empty_matrix(self,rows,columns):
+        matrix = []
+        for i in range(rows):
+            matrix.append(self.get_empty_row(columns))
+        return matrix
+        
+    def get_transpose(self,mat1):
         rows = len(mat1)
         columns = len(mat1[0])
+        transpose = self.get_empty_matrix(columns,rows)
         for i in range(rows):
             for j in range(columns):
-                transpose[i][j] = mat1[j][i]
+                transpose[j][i] = mat1[i][j]
         return transpose
 
     def matrix_multiply(self,mat1,mat2):
