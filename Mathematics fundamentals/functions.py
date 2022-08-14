@@ -43,7 +43,10 @@ class Functions:
         return stretch * np.exp(- (x+horizontal_shift) ** 2)
 
     def sin(self, x, frequency = 1):
-        return np.sin(x * frequency)
+        return np.sin(x/(2*np.pi) * frequency)
 
     def cos(self,x,frequency = 1):
-        return np.cos(x * frequency)
+        return np.cos(x/(2*np.pi) * frequency)
+    
+    def tan(self,x,frequency = 1):
+        return np.tan(x/(2*np.pi) * frequency)
