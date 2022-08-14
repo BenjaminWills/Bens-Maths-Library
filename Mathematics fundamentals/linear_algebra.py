@@ -65,3 +65,11 @@ class Linalg:
                     row1, row2
                 )
         return multiplied_matrix
+
+    def transform_function(self, x, function, matrix):
+        co_ordinate = [[x], [function(x)]]
+        new_co_ordinate = self.matrix_multiply(matrix, co_ordinate)
+        output = []
+        for element in new_co_ordinate:
+            output.append(element[0])
+        return output
