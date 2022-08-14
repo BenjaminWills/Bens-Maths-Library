@@ -48,14 +48,15 @@ class Linalg:
 
         In essence we can only multiply matrices with dimensions n x k and k x m, the resulting matrix
         will have dimension n x m. The plan is to transpose mat2 and then simply make the [i,j] element
-        of the new matrix equal to the dot product of the i'th and j'th rows.
+        of the new matrix equal to the dot product of the i'th row of mat1 and the j'th column of mat2
+        (which is the j'th row of mat2 transpose).
         """
         mat1_rows = len(mat1)
         mat1_columns = len(mat1[0])
         mat2_rows = len(mat2)
         mat2_columns = len(mat2[0])
         if mat1_columns != mat2_rows:
-            return f"Error! Matrix one has {mat1_columns}  rows and matrix two has {mat2_rows} columns."
+            return f"Error! Matrix one has {mat1_columns} columns and matrix two has {mat2_rows} rows."
         mat2_transpose = self.get_transpose(mat2)
         multiplied_matrix = self.get_empty_matrix(mat1_rows, mat2_columns)
         for row_index, row1 in enumerate(mat1):
