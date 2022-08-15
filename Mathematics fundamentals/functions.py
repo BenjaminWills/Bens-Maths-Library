@@ -65,8 +65,10 @@ class Functions:
         if (radius**2 - (x - centre_x) ** 2).any() <= 0:
             return [x, 0]
 
-        y_co_ordinate = centre_y + np.sqrt(radius**2 - (x - centre_x) ** 2)
-        return [-y_co_ordinate, y_co_ordinate]
+        pos_y_co_ordinate = centre_y + np.sqrt(radius**2 - (x - centre_x) ** 2)
+        neg_y_co_ordinate = centre_y - np.sqrt(radius**2 - (x - centre_x) ** 2)
+
+        return [neg_y_co_ordinate,pos_y_co_ordinate]
 
     def hyperbola(self, x, major, minor):
         y_co_ordinate = major * np.sqrt(1 + (x / minor) ** 2)
