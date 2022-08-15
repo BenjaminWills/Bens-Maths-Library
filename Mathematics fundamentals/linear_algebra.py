@@ -97,4 +97,11 @@ class Linalg:
         return np.linalg.det(matrix)
 
     def get_inverted_matrix(self, matrix):
+        # TODO: CODE GAUSSIAN ELIMINATION
         return np.linalg.inv(matrix)
+
+    def get_eigenvalues(self,matrix):
+        return np.linalg.eigvals(matrix)[0]
+    
+    def get_eigenvectors(self,matrix):
+        return np.linalg.eig(matrix)[1]
