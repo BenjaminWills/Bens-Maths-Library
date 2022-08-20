@@ -14,7 +14,7 @@ class Visualisation:
         return ax
 
     def matplotlib_config(self, ax, set_y_lim=False, y_lim1=0, y_lim2=0):
-        ax.set_aspect("equal")
+        ax.set_aspect('auto')
         ax.grid(True, which="both", linestyle=":")
         ax.spines["left"].set_position("zero")
         ax.spines["right"].set_color("none")
