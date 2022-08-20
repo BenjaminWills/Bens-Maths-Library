@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals')
 
-# from numbers.real import Real
+from numbers.real import Real
 import numpy as np
 import math 
 
@@ -39,15 +39,27 @@ class Differentiation:
         
 
     def taylor_series(self,function,x,order,centre = 0):
-        output = function(x)
+        output = function(centre)
         for i in range(1,order):
-            output += self.get_nth_derivative(function,x,order) * (x - centre) ** order / math.factorial(order)
+            output += (self.get_nth_derivative(function,centre,order) * ((x - centre) ** order)) / math.factorial(order)
         return output
 
 
 diff = Differentiation()
 
 def polynomial(x):
-    return x**3 
+    return x**2
 
-print(diff.get_nth_derivative(polynomial,5,2))
+
+from visualisations.visualisations import Visualisation
+
+def taylor_approximation(x):
+    return diff.taylor_series(polynomial,x,2)
+
+# vis = Visualisation()
+# ax = vis.make_axis()
+# vis.get_function_visualisation(polynomial,-10,10,1000,ax)
+# vis.get_function_visualisation(taylor_approximation,-10,10,1000,ax)
+# vis.show_visualisation()
+
+print(diff.taylor_series(polynomial,1,10)) # PRECISION ISSUE IN NTH DERIVATIVE FUNCTION. TODO FIX.
