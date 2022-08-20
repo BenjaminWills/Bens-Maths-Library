@@ -1,4 +1,3 @@
-from ast import Num
 from complex import Complex
 import numpy as np
 
@@ -9,4 +8,8 @@ class Real:
         else:
             return np.sqrt(x)
 
-num = Real()
+    def factorial(self,x):
+        if x == 0:
+            return 1
+        else:
+            return x * self.factorial(x-1)
