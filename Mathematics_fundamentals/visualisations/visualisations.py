@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals')
+
 import numpy as np
 import matplotlib.pyplot as plt
 from linear_algebra.linear_algebra import Linalg

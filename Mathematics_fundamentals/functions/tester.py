@@ -1,5 +1,5 @@
 from functions import Functions
-from  visualisations.visualisations import Visualisation
+from Mathematics_fundamentals.visualisations.visualisations import Visualisation
 
 func_space = Functions()
 visualiser = Visualisation()

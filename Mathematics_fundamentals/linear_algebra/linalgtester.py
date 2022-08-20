@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals')
+
 from linear_algebra import Linalg
 from functions.functions import Functions
 from visualisations.visualisations import Visualisation
