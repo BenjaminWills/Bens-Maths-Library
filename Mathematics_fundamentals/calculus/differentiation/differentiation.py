@@ -8,8 +8,17 @@ class Differentiation:
         slope = vert_change/dx
         return slope
     
-    def get_turning_points(selfmfunction,start,end,method = ''):
-        if method == '':
-            # NEWTON RAPHSON
-            pass
+    def newton_raphson_method(self,function,start,end,initial_point):
+        x0 = initial_point
+        max_iterations = 100000
+        iteration_count = 0
+        while abs(self.get_derivative(function,x0)) > 10 ** -5:
+            if iteration_count == max_iterations:
+                return 'DIVERGENT'
+            slope = self.get_derivative(function,x0)
+            func_value = function(x0)
+            x0 = x0 - (func_value/slope)
+            iteration_count += 1
+        return x0
+
 
