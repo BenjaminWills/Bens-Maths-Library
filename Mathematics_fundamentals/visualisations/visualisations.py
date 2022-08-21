@@ -3,6 +3,9 @@ sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundament
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
+
+
 from linear_algebra.linear_algebra import Linalg
 from calculus.differentiation.differentiation import Differentiation
 from functions.functions import Functions
@@ -11,8 +14,10 @@ plt.style.use("dark_background")
 
 
 class Visualisation:
-    def make_axis(self):
+    def make_axis(self,all = False):
         fig, ax = plt.subplots()
+        if all:
+            return ax,fig
         return ax
 
     def matplotlib_config(self, ax, set_y_lim=False, y_lim1=0, y_lim2=0):
@@ -66,6 +71,7 @@ class Visualisation:
         intercept = function(x) - x * slope
         def tangent(x):
             return func.line(x,slope,intercept)
+        self.matplotlib_config(self, ax)
         self.get_function_visualisation(tangent,start,end,steps,ax)
         self.get_function_visualisation(function,start,end,steps,ax)
         return 'plotted.'
@@ -79,11 +85,11 @@ class Visualisation:
         intercept_one = function_values[0] - x * slope_one
         slope_two  = conic_derivative[1]
         intercept_two = function_values[1] - x * slope_two
-
         def upper_tangent(x):
             return func.line(x,slope_one,intercept_one)
         def lower_tangent(x):
             return func.line(x,slope_two,intercept_two)
+        self.matplotlib_config(self, ax)
         self.get_function_visualisation(upper_tangent,start,end,steps,ax)
         self.get_function_visualisation(lower_tangent,start,end,steps,ax)
         self.get_conic_visualisation(function,start,end,steps,ax)
@@ -93,8 +99,6 @@ class Visualisation:
         plt.show()
 
     
-
 # TODO:
 # - NEWTON RAPHSON GRAPH
-# - TANGENT PLOTTER (SLIDER?)
 # - 
