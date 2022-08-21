@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals')
 
-from numbers.real import Real
+# from numbers.real import Real
 import numpy as np
 import math 
 
@@ -16,9 +16,9 @@ class Differentiation:
         x0 = initial_point
         max_iterations = 100000
         iteration_count = 0
-        while abs(self.get_derivative(function,x0)) > 10 ** -5:
+        while abs(function(x0)) > 10 ** -5:
             if iteration_count == max_iterations:
-                return 'DIVERGENT: possibly a saddle point nearby.'
+                return 'DIVERGENT: possibly a saddle point nearby.',x0
             slope = self.get_derivative(function,x0)
             func_value = function(x0)
             x0 = x0 - (func_value/slope)
@@ -62,4 +62,4 @@ def taylor_approximation(x):
 # vis.get_function_visualisation(taylor_approximation,-10,10,1000,ax)
 # vis.show_visualisation()
 
-print(diff.taylor_series(polynomial,1,10)) # PRECISION ISSUE IN NTH DERIVATIVE FUNCTION. TODO FIX.
+# print(diff.taylor_series(polynomial,1,10)) # PRECISION ISSUE IN NTH DERIVATIVE FUNCTION. TODO FIX.
