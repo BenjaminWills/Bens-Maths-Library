@@ -11,6 +11,16 @@ class Differentiation:
         vert_change = function(x+dx) - function(x)
         slope = vert_change/dx
         return slope
+
+    def get_conic_derivative(self,function,x):
+        dx = 10 ** -5 
+        shifted = function(x+dx)
+        original = function(x)
+        first_diff = shifted[0] - original[0]
+        second_diff = shifted[1] - original [1]
+        first_slope = first_diff/dx
+        second_slope = second_diff/dx
+        return [first_slope,second_slope]
     
     def newton_raphson_method(self,function,initial_point, verbose = False):
         x0 = initial_point
@@ -44,22 +54,3 @@ class Differentiation:
             output += (self.get_nth_derivative(function,centre,order) * ((x - centre) ** order)) / math.factorial(order)
         return output
 
-
-diff = Differentiation()
-
-def polynomial(x):
-    return x**2
-
-
-from visualisations.visualisations import Visualisation
-
-def taylor_approximation(x):
-    return diff.taylor_series(polynomial,x,2)
-
-# vis = Visualisation()
-# ax = vis.make_axis()
-# vis.get_function_visualisation(polynomial,-10,10,1000,ax)
-# vis.get_function_visualisation(taylor_approximation,-10,10,1000,ax)
-# vis.show_visualisation()
-
-# print(diff.taylor_series(polynomial,1,10)) # PRECISION ISSUE IN NTH DERIVATIVE FUNCTION. TODO FIX.
