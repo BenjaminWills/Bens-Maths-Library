@@ -4,6 +4,8 @@ sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundament
 import numpy as np
 import matplotlib.pyplot as plt
 from linear_algebra.linear_algebra import Linalg
+from calculus.differentiation.differentiation import Differentiation
+from functions.functions import Functions
 
 plt.style.use("dark_background")
 
@@ -14,7 +16,7 @@ class Visualisation:
         return ax
 
     def matplotlib_config(self, ax, set_y_lim=False, y_lim1=0, y_lim2=0):
-        ax.set_aspect('auto')
+        ax.set_aspect('equal')
         ax.grid(True, which="both", linestyle=":")
         ax.spines["left"].set_position("zero")
         ax.spines["right"].set_color("none")
@@ -57,5 +59,42 @@ class Visualisation:
         ax.scatter(pos_points[0], pos_points[1], marker=".", s=0.2)
         ax.scatter(neg_points[0], neg_points[1], marker=".", s=0.2)
 
+    def visualise_tangent(self,function,x,start,end,steps,ax):
+        diff = Differentiation()
+        func = Functions()
+        slope  = diff.get_derivative(function,x)
+        intercept = function(x) - x * slope
+        def tangent(x):
+            return func.line(x,slope,intercept)
+        self.get_function_visualisation(tangent,start,end,steps,ax)
+        self.get_function_visualisation(function,start,end,steps,ax)
+        return 'plotted.'
+
+    def visualise_conic_tangent(self,function,x,start,end,steps,ax):
+        diff = Differentiation()
+        func = Functions()
+        conic_derivative = diff.get_conic_derivative(function,x)
+        function_values = function(x)
+        slope_one  = conic_derivative[0]
+        intercept_one = function_values[0] - x * slope_one
+        slope_two  = conic_derivative[1]
+        intercept_two = function_values[1] - x * slope_two
+
+        def upper_tangent(x):
+            return func.line(x,slope_one,intercept_one)
+        def lower_tangent(x):
+            return func.line(x,slope_two,intercept_two)
+        self.get_function_visualisation(upper_tangent,start,end,steps,ax)
+        self.get_function_visualisation(lower_tangent,start,end,steps,ax)
+        self.get_conic_visualisation(function,start,end,steps,ax)
+        return 'plotted.'
+
     def show_visualisation(self):
         plt.show()
+
+    
+
+# TODO:
+# - NEWTON RAPHSON GRAPH
+# - TANGENT PLOTTER (SLIDER?)
+# - 
