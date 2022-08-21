@@ -52,7 +52,7 @@ class Functions:
         return np.exp(x)
 
     def ln(self, x):
-        if x.any() <= 0:
+        if x <= 0:
             return 0
         return np.log(x)
 
@@ -60,9 +60,12 @@ class Functions:
         return np.log(x) / np.log(n)
 
     def circle(self, x, radius, centre_x, centre_y):
-        if (radius**2 - (x - centre_x) ** 2).any() <= 0:
-            return [x, 0]
-
+        # if type(x) == 'numpy.float64':
+        #     if (radius**2 - (x - centre_x) ** 2).any() <= 0:
+        #         return [x, 0]
+        # else:
+        #     if (radius**2 - (x - centre_x) ** 2) <= 0:
+        #         return [x, 0]
         pos_y_co_ordinate = centre_y + np.sqrt(radius**2 - (x - centre_x) ** 2)
         neg_y_co_ordinate = centre_y - np.sqrt(radius**2 - (x - centre_x) ** 2)
 
@@ -73,7 +76,7 @@ class Functions:
         return [-y_co_ordinate, y_co_ordinate]
 
     def elipse(self, x, major, minor):
-        if (1 - (x / minor) ** 2).any() <= 0:
-            return [x, 0]
+        # if (1 - (x / minor) ** 2).any() <= 0:
+        #     return [x, 0]
         y_co_ordinate = major * np.sqrt(1 - (x / minor) ** 2)
         return [-y_co_ordinate, y_co_ordinate]
