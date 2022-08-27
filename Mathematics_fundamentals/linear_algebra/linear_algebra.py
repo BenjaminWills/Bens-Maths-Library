@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Linalg:
     def get_empty_row(self, length):
         row = []
@@ -76,48 +77,48 @@ class Linalg:
             output.append(element[0])
         return output
 
-    def transform_conic_function(self,x,function,matrix):
+    def transform_conic_function(self, x, function, matrix):
         # One to many functions require special attention.
         outputs = []
         for co_ordinates in function(x):
-            co_ordinate = [[x],[co_ordinates]]
-            new_co_ordinate = self.matrix_multiply(matrix,co_ordinate)
-            outputs.append([new_co_ordinate[0],new_co_ordinate[1]])
+            co_ordinate = [[x], [co_ordinates]]
+            new_co_ordinate = self.matrix_multiply(matrix, co_ordinate)
+            outputs.append([new_co_ordinate[0], new_co_ordinate[1]])
         return outputs
 
-    def get_2_d_determinant(self,matrix):
+    def get_2_d_determinant(self, matrix):
         """
         The n x n dimensional determinant can be found recursively from the root determinant,
         the 2 x 2 determinant.
         """
-        determinant = matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
+        determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
         return determinant
 
-    def get_determinant(self,matrix):
+    def get_determinant(self, matrix):
         return np.linalg.det(matrix)
 
     def get_inverted_matrix(self, matrix):
         # TODO: CODE GAUSSIAN ELIMINATION
         rows = len(matrix)
-        empty_matrix = self.get_empty_matrix(rows,rows)
+        empty_matrix = self.get_empty_matrix(rows, rows)
         inv = np.linalg.inv(matrix)
         for i in range(rows):
             for j in range(rows):
                 empty_matrix[i][j] = inv[i][j]
         return empty_matrix
 
-    def get_eigenvalues(self,matrix):
+    def get_eigenvalues(self, matrix):
         return np.linalg.eigvals(matrix)[0]
-    
-    def get_eigenvectors(self,matrix):
+
+    def get_eigenvectors(self, matrix):
         return np.linalg.eig(matrix)[1]
 
-    def solve_system_of_equations(self,matrix,vector):
+    def solve_system_of_equations(self, matrix, vector):
         """
         Solving Ax = b, where x is a vector of unkowns, so x = inv(A)b.
         Only works when x has the same length as A and A is non singular.
         """
         if len(matrix) != len(vector) or self.get_determinant(matrix) == 0:
-            return 'Error! Invalid vector or singular matrix entered.'
+            return "Error! Invalid vector or singular matrix entered."
         matrix_inverse = self.get_inverted_matrix(matrix)
-        return self.matrix_multiply(matrix_inverse,vector)
+        return self.matrix_multiply(matrix_inverse, vector)

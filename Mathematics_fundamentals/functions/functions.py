@@ -1,8 +1,12 @@
 import sys
-sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers')
+
+sys.path.append(
+    "/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers"
+)
 
 import numpy as np
 from complex import Complex
+
 
 class Functions:
     def line(self, x, gradient, intercept):
@@ -30,10 +34,10 @@ class Functions:
         return 1 / (1 + np.exp(-x))
 
     def sinh(self, x):
-        return (self.exp(x) - self.exp(x*-1)) * 0.5
+        return (self.exp(x) - self.exp(x * -1)) * 0.5
 
     def cosh(self, x):
-        return  (self.exp(x) + self.exp(x*-1)) * 0.5
+        return (self.exp(x) + self.exp(x * -1)) * 0.5
 
     def tanh(self, x):
         if x.any() == 0:
@@ -53,10 +57,10 @@ class Functions:
         return np.tan(x / (2 * np.pi) * frequency)
 
     def exp(self, x):
-        if isinstance(x,Complex):
+        if isinstance(x, Complex):
             re = x.re
             im = x.im
-            return Complex(np.exp(re) * np.cos(im),np.exp(re) * np.sin(im))
+            return Complex(np.exp(re) * np.cos(im), np.exp(re) * np.sin(im))
         return np.exp(x)
 
     def ln(self, x):
@@ -77,7 +81,7 @@ class Functions:
         pos_y_co_ordinate = centre_y + np.sqrt(radius**2 - (x - centre_x) ** 2)
         neg_y_co_ordinate = centre_y - np.sqrt(radius**2 - (x - centre_x) ** 2)
 
-        return [neg_y_co_ordinate,pos_y_co_ordinate]
+        return [neg_y_co_ordinate, pos_y_co_ordinate]
 
     def hyperbola(self, x, major, minor):
         y_co_ordinate = major * np.sqrt(1 + (x / minor) ** 2)
