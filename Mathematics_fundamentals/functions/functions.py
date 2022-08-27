@@ -1,4 +1,8 @@
+import sys
+sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers')
+
 import numpy as np
+from complex import Complex
 
 class Functions:
     def line(self, x, gradient, intercept):
@@ -26,10 +30,10 @@ class Functions:
         return 1 / (1 + np.exp(-x))
 
     def sinh(self, x):
-        return 1 / 2 * (np.exp(x) - np.exp(-x))
+        return (self.exp(x) - self.exp(x*-1)) * 0.5
 
     def cosh(self, x):
-        return 1 / 2 * (np.exp(x) + np.exp(-x))
+        return  (self.exp(x) + self.exp(x*-1)) * 0.5
 
     def tanh(self, x):
         if x.any() == 0:
@@ -49,6 +53,10 @@ class Functions:
         return np.tan(x / (2 * np.pi) * frequency)
 
     def exp(self, x):
+        if isinstance(x,Complex):
+            re = x.re
+            im = x.im
+            return Complex(np.exp(re) * np.cos(im),np.exp(re) * np.sin(im))
         return np.exp(x)
 
     def ln(self, x):
