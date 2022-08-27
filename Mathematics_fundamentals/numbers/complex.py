@@ -1,3 +1,4 @@
+from this import d
 from real import Real
 import numpy as np
 
@@ -5,6 +6,18 @@ class Complex:
     def __init__(self,real,imaginary):
         self.re = real
         self.im = imaginary
+
+    def __add__(self,other):
+        return Complex(self.re + other.re,self.im + other.im)
+
+    def __sub__(self,other):
+        return Complex(self.re - other.re,self.im - other.im)
+        
+    def __mul__(self,other):
+        if isinstance(other,Complex):
+                return Complex(self.re * other.re - self.im * other.im, self.re * other.im + self.im * other.re)
+        else:
+            return Complex(other * self.re,other * self.im)
 
     def get_conjugate(self):
         return Complex(self.re,-self.im)
@@ -19,13 +32,3 @@ class Complex:
     def get_argument(self):
         return np.arctan(self.im/self.re)
 
-    def multiply_complex(self,num):
-        if isinstance(num,Complex):
-                return Complex(self.re * num.re - self.im * num.im, self.re * num.im + self.im * num.re)
-        else:
-            return Complex(num * self.re,num * self.im)
-    
-a = Complex(4,2)
-b = a.get_conjugate()
-# print(a.get_complex_number(),b.get_complex_number())
-print(a.multiply_complex(b).get_complex_number())
