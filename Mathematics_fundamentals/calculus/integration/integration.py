@@ -33,6 +33,3 @@ class Integration:
             local_end = start + (i + 1) * width
             area += self.get_individual_area(function, local_start, local_end)
         return width / 6 * area
-
-
-

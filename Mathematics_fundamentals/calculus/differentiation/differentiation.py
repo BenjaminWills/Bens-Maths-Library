@@ -1,8 +1,10 @@
 import sys
 
-sys.path.append("/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals")
+sys.path.append(
+    "/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers"
+)
 
-# from numbers.real import Real
+# from real import Real
 import numpy as np
 import math
 

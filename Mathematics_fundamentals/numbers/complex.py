@@ -1,4 +1,4 @@
-from real import Real
+# from real import Real
 import numpy as np
 
 
@@ -40,4 +40,3 @@ class Complex:
 
     def get_argument(self):
         return np.arctan(self.im / self.re)
-

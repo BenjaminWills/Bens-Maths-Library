@@ -21,8 +21,12 @@ class Visualisation:
             return ax, fig
         return ax
 
-    def matplotlib_config(self, ax, set_y_lim=False, y_lim1=0, y_lim2=0):
-        ax.set_aspect("auto")
+    def matplotlib_config(self, ax, equal=False):
+        if equal == True:
+            ratio = "equal"
+        else:
+            ratio = "auto"
+        ax.set_aspect(ratio)
         ax.grid(True, which="both", linestyle=":")
         ax.spines["left"].set_position("zero")
         ax.spines["right"].set_color("none")
@@ -30,8 +34,6 @@ class Visualisation:
         ax.spines["bottom"].set_position("zero")
         ax.spines["top"].set_color("none")
         ax.xaxis.tick_bottom()
-        if set_y_lim:
-            ax.set_ylim(y_lim1, y_lim2)
 
     def get_function_visualisation(self, function, start, end, steps, ax):
         if start >= end:
@@ -53,7 +55,7 @@ class Visualisation:
         space = np.linspace(start, end, steps)
         lin = Linalg()
         points = lin.transform_function(space, function, transformation_matrix)
-        self.matplotlib_config(ax, set_y_lim=True, y_lim1=-2, y_lim2=10)
+        self.matplotlib_config(ax)
         ax.scatter(points[0], points[1], marker=".", s=0.2)
 
     def visualise_conic_linear_transform(
@@ -80,7 +82,7 @@ class Visualisation:
         def tangent(x):
             return func.line(x, slope, intercept)
 
-        self.matplotlib_config(self, ax)
+        self.matplotlib_config(ax)
         self.get_function_visualisation(tangent, start, end, steps, ax)
         self.get_function_visualisation(function, start, end, steps, ax)
         return "plotted."
@@ -101,7 +103,7 @@ class Visualisation:
         def lower_tangent(x):
             return func.line(x, slope_two, intercept_two)
 
-        self.matplotlib_config(self, ax)
+        self.matplotlib_config(ax, equal=True)
         self.get_function_visualisation(upper_tangent, start, end, steps, ax)
         self.get_function_visualisation(lower_tangent, start, end, steps, ax)
         self.get_conic_visualisation(function, start, end, steps, ax)
