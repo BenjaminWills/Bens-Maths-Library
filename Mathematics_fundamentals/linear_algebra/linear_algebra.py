@@ -2,6 +2,12 @@ import numpy as np
 
 
 class Linalg:
+
+    """
+    In this class I intend to implement all of linear algebra so that it can be applied to
+    future projects.
+    """
+
     def get_empty_row(self, length):
         row = []
         for i in range(length):
@@ -27,7 +33,10 @@ class Linalg:
                 transpose[j][i] = mat1[i][j]
         return transpose
 
-    def get_dot_product(self, vector1, vector2):
+    def get_dot_product(self, vector1, vector2) -> float:
+        """
+        Calculates the dot product between two vectors of equal length.
+        """
         v_1_length = len(vector1)
         v_2_length = len(vector2)
         if v_1_length != v_2_length:
@@ -37,6 +46,12 @@ class Linalg:
         for i in range(v_2_length):
             sum += vector1[i] * vector2[i]
         return sum
+    
+    def get_cross_product(self,vector1,vector2):
+        """
+        Will calculate the cross product between two vectors. These vectors must be three dimensional.
+        """
+
 
     def matrix_multiply(self, mat1, mat2):
         """
@@ -70,6 +85,9 @@ class Linalg:
         return multiplied_matrix
 
     def transform_function(self, x, function, matrix):
+        """
+        Will transform points of a function by using an inputted matrix transformation.
+        """
         co_ordinate = [[x], [function(x)]]
         new_co_ordinate = self.matrix_multiply(matrix, co_ordinate)
         output = []
@@ -78,7 +96,10 @@ class Linalg:
         return output
 
     def transform_conic_function(self, x, function, matrix):
-        # One to many functions require special attention.
+        """
+        One to many functions require special attention. This function will transform two points to new co ordinates
+        as opposed to just one.
+        """
         outputs = []
         for co_ordinates in function(x):
             co_ordinate = [[x], [co_ordinates]]
@@ -95,10 +116,15 @@ class Linalg:
         return determinant
 
     def get_determinant(self, matrix):
+        """
+        Gets determinant of an n x n matrix.
+        """
         return np.linalg.det(matrix)
 
     def get_inverted_matrix(self, matrix):
-        # TODO: CODE GAUSSIAN ELIMINATION
+        """
+        Inverts n x n matrix that is non singular.
+        """
         rows = len(matrix)
         empty_matrix = self.get_empty_matrix(rows, rows)
         inv = np.linalg.inv(matrix)
