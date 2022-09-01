@@ -1,0 +1,12 @@
+pure:
+  (single variable) calculus:
+    - phase portrait
+    - differential equations
+
+probability:
+
+
+statistics:
+
+mechanics:
+
