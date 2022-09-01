@@ -9,12 +9,18 @@ class Linalg:
     """
 
     def get_empty_row(self, length):
+        """
+        returns an row vector of zeros.
+        """
         row = []
         for i in range(length):
             row.append(0)
         return row
 
     def get_empty_matrix(self, rows, columns):
+        """
+        Returns a rows x columns matrix with zeros for every entry.
+        """
         matrix = []
         for i in range(rows):
             matrix.append(self.get_empty_row(columns))
@@ -47,10 +53,47 @@ class Linalg:
             sum += vector1[i] * vector2[i]
         return sum
     
+    def unpack_vector(self,vector):
+        """
+        Will unpack a vector into its components.
+        """
+        unpacked_vector = []
+        for i in vector:
+            unpacked_vector.append(i[0])
+        return unpacked_vector
+    
     def get_cross_product(self,vector1,vector2):
         """
         Will calculate the cross product between two vectors. These vectors must be three dimensional.
+        note vectors must be in the form of:
+        v = [
+            [v1],
+            [v2],
+            [v3]
+        ]
         """
+        v1,v2,v3 = self.unpack_vector(vector1)
+        w1,w2,w3 = self.unpack_vector(vector2)
+
+        cross_vector = [
+            [v2*w3 - v3*w2],
+            [v3*w1 - v1*w3],
+            [v1*w2 - v2*w3]
+        ]
+        return cross_vector
+    
+    def matrix_from_vectors(self,*args):
+        """
+        Creating a matrix from vectors passed in as args. Note that we can only do this if all the inputted vectors
+        have the right shape.
+        """
+        columns = len(args)
+        rows = len(args[0])
+        matrix = self.get_empty_matrix(rows,columns)
+        for column,vector in enumerate(args):
+            for row in range(rows):
+                matrix[row][column] = vector[row]
+        return matrix
 
 
     def matrix_multiply(self, mat1, mat2):
@@ -134,10 +177,22 @@ class Linalg:
         return empty_matrix
 
     def get_eigenvalues(self, matrix):
+        """
+        Will get the eigenvalues of a matrix
+        """
         return np.linalg.eigvals(matrix)[0]
 
     def get_eigenvectors(self, matrix):
+        """
+        Will get the eigenvectors of a matrix
+        """
         return np.linalg.eig(matrix)[1]
+
+    def diagonalise_matrix(self,matrix):
+        """
+        Will diagonalise a matrix if that is possible (i.e if all eigenvalues are non degenerate.)
+        """
+
 
     def solve_system_of_equations(self, matrix, vector):
         """
