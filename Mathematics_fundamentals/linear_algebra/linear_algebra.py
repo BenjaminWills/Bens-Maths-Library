@@ -238,8 +238,27 @@ class Vector:
                 print(str(component) + ',')
         print(']')
 
+    @staticmethod
+    def get_dot_product(vector1, vector2) -> float:
+        """
+        Calculates the dot product between two vectors of equal length.
+        """
+        v_1_dim = len(vector1.vector)
+        v_2_dim = len(vector2.vector)
+        v1 = vector1.vector
+        v2 = vector2.vector
+        if v_1_dim != v_2_dim:
+            raise TypeError(f"""Vector 1 has length {v_1_dim}, and vector 2 has length {v_2_dim}. 
+            These must be equal.""")
+        sum = 0
+        for i in range(v_2_dim):
+            sum += v1[i][0] * v2[i][0]
+        return sum
+
 if __name__ == '__main__':
     a = Vector(1,1,1)
-    b = Vector(1,1,1)
+    b = Vector(1,3,1)
     c = Vector(1,1,1)
     d = a + b + c
+    e = Vector.get_dot_product(a,b)
+    print(e)
