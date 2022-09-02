@@ -1,4 +1,5 @@
 # from os import stat
+# from os import stat
 import numpy as np
 
 
@@ -16,14 +17,21 @@ class Matrix:
         self.rows = len(self.matrix)
         self.columns = len(self.matrix[0])
 
-    def get_empty_row(self, length):
+    def show_matrix(self):
+        print('[')
+        for row in self.matrix:
+            print(str(row))
+        print(']')
+
+    @staticmethod
+    def get_empty_row(length):
         """
         returns an row vector of zeros.
         """
-        row = []
-        for i in range(length):
-            row.append(0)
-        return row
+        row = Vector()
+        zeros = [0]*length
+        row.add_entries(*zeros)
+        return Vector.unpack_vector(row)
 
     def get_empty_matrix(self, rows, columns):
         """
@@ -233,6 +241,14 @@ class Vector:
         else:
             raise TypeError('Dimensions not equal.')
                 
+    def change_entry(self,new_entry,index):
+        self.vector[index] = [new_entry]
+        return f"Entry changed to {new_entry}"
+
+    def add_entries(self,*new_entries):
+        for entry in new_entries:
+            self.vector.append([entry])
+        return f"entries added!"
 
     def show_vector(self):
         """
@@ -273,12 +289,13 @@ class Vector:
             [2],
             [3]
         ]
-        Vector.unpack(a) = [1,2,3].
+        Vector.unpack(a) = [1,2,3]. This effectively transposes a vector!
         """
         unpacked_vector = []
         for i in vector.vector:
             unpacked_vector.append(i[0])
         return unpacked_vector
+
     @staticmethod
     def get_cross_product(vector1,vector2):
         """
@@ -313,4 +330,13 @@ if __name__ == '__main__':
         [4,5,6],
         [7,8,9]
     )
-    print(M.columns)
+    # print(M.show_matrix())
+
+    v = Vector()
+    v.add_entries(1,2,3,4)
+
+    print(Matrix.get_empty_row(5))
+
+    
+
+    
