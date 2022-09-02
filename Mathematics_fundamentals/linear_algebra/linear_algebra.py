@@ -255,10 +255,28 @@ class Vector:
             sum += v1[i][0] * v2[i][0]
         return sum
 
+    @staticmethod
+    def unpack_vector(vector):
+        """
+        Will unpack a vector into its components, and then into an array.
+
+        a = [
+            [1],
+            [2],
+            [3]
+        ]
+        Vector.unpack(a) = [1,2,3].
+        """
+        unpacked_vector = []
+        for i in vector.vector:
+            unpacked_vector.append(i[0])
+        return unpacked_vector
+    
+
 if __name__ == '__main__':
     a = Vector(1,1,1)
     b = Vector(1,3,1)
     c = Vector(1,1,1)
     d = a + b + c
     e = Vector.get_dot_product(a,b)
-    print(e)
+    print(Vector.unpack_vector(d))
