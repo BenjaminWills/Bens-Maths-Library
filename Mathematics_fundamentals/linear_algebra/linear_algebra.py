@@ -18,10 +18,31 @@ class Matrix:
         self.columns = len(self.matrix[0])
 
     def show_matrix(self):
+        """
+        Gives visual representation of a matrix.
+        """
         print('[')
         for row in self.matrix:
             print(str(row))
         print(']')
+
+    def add_rows(self,*rows):
+        """
+        Adds rows to a matrix object.
+        """
+        for row in rows:
+            self.matrix.append(row)
+        return f"{len(rows)} rows added!"
+    
+    def add_columns(self,*columns):
+        """
+        Adds columns to a matrix object
+        """
+        for column in columns:
+            for index,value in enumerate(column):
+                self.matrix[index].append(value)
+        return f"{len(columns)} columns added!"
+
 
     @staticmethod
     def get_empty_row(length):
@@ -330,12 +351,9 @@ if __name__ == '__main__':
         [4,5,6],
         [7,8,9]
     )
-    # print(M.show_matrix())
-
-    v = Vector()
-    v.add_entries(1,2,3,4)
-
-    print(Matrix.get_empty_row(5))
+    M.add_rows([1,2,3])
+    M.show_matrix()
+    
 
     
 
