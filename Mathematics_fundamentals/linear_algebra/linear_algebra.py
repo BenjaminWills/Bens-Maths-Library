@@ -203,3 +203,43 @@ class Linalg:
             return "Error! Invalid vector or singular matrix entered."
         matrix_inverse = self.get_inverted_matrix(matrix)
         return self.matrix_multiply(matrix_inverse, vector)
+
+class Vector:
+
+    def __init__(self,*args:int):
+        self.vector = [[arg] for arg in args]
+
+    def __add__(self,other):
+        """
+        Will add vectors component wise, only if they're the same shape.
+        """
+        v1 = self.vector
+        v2 = other.vector
+        dimv1 = len(v1)
+        dimv2 = len(v2)
+        packed_args = []
+        if dimv1 == dimv2:
+            for i in range(dimv1):
+                packed_args.append(v1[i][0] + v2[i][0])
+            return Vector(*packed_args)
+        else:
+            raise TypeError('Dimensions not equal.')
+                
+
+    def show_vector(self):
+        """
+        Visually showing a vector.
+        """
+        print('[')
+        for index,component in enumerate(self.vector):
+            if index == len(self.vector)-1:
+                print(str(component))
+            else:
+                print(str(component) + ',')
+        print(']')
+
+if __name__ == '__main__':
+    a = Vector(1,1,1)
+    b = Vector(1,1,1)
+    c = Vector(1,1,1)
+    d = a + b + c
