@@ -1,12 +1,20 @@
+# from os import stat
 import numpy as np
 
 
-class Linalg:
+class Matrix:
 
     """
     In this class I intend to implement all of linear algebra so that it can be applied to
     future projects.
     """
+
+    def __init__(self,*args:list):
+        self.matrix = []
+        for row in args:
+            self.matrix.append(row)
+        self.rows = len(self.matrix)
+        self.columns = len(self.matrix[0])
 
     def get_empty_row(self, length):
         """
@@ -271,6 +279,23 @@ class Vector:
         for i in vector.vector:
             unpacked_vector.append(i[0])
         return unpacked_vector
+    @staticmethod
+    def get_cross_product(vector1,vector2):
+        """
+        Will calculate the cross product between two vectors. These vectors must be three dimensional.
+        note vectors must be instances of Vector.
+        """
+        v1,v2,v3 = Vector.unpack_vector(vector1)
+        w1,w2,w3 = Vector.unpack_vector(vector2)
+
+        cross_vector = [
+            [v2*w3 - v3*w2],
+            [v3*w1 - v1*w3],
+            [v1*w2 - v2*w3]
+        ]
+        return cross_vector
+
+    
     
 
 if __name__ == '__main__':
@@ -278,5 +303,14 @@ if __name__ == '__main__':
     b = Vector(1,3,1)
     c = Vector(1,1,1)
     d = a + b + c
+    unpacked_d = Vector.unpack_vector(d)
     e = Vector.get_dot_product(a,b)
-    print(Vector.unpack_vector(d))
+    f = Vector.get_cross_product(a,b)
+
+
+    M = Matrix(
+        [1,2,3],
+        [4,5,6],
+        [7,8,9]
+    )
+    print(M.columns)
