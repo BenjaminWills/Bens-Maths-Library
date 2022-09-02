@@ -15,7 +15,10 @@ class Matrix:
         for row in args:
             self.matrix.append(row)
         self.rows = len(self.matrix)
-        self.columns = len(self.matrix[0])
+        if len(args) > 0:
+            self.columns = len(self.matrix[0])
+        else:
+            self.columns = 0
 
     def show_matrix(self):
         """
@@ -43,6 +46,12 @@ class Matrix:
                 self.matrix[index].append(value)
         return f"{len(columns)} columns added!"
 
+    def change_entry(self,row,column,new_value):
+        """
+        Will change an entry in a matrix
+        """
+        self.matrix[row][column] = new_value
+        return f"Index ({row},{column}) changed to {new_value}"
 
     @staticmethod
     def get_empty_row(length):
@@ -54,13 +63,14 @@ class Matrix:
         row.add_entries(*zeros)
         return Vector.unpack_vector(row)
 
-    def get_empty_matrix(self, rows, columns):
+    @staticmethod
+    def get_empty_matrix(rows, columns):
         """
         Returns a rows x columns matrix with zeros for every entry.
         """
-        matrix = []
-        for i in range(rows):
-            matrix.append(self.get_empty_row(columns))
+        matrix = Matrix()
+        empty_rows = [Matrix.get_empty_row(columns)] * rows
+        matrix.add_rows(*empty_rows)
         return matrix
 
     def get_transpose(self, mat1):
@@ -352,9 +362,7 @@ if __name__ == '__main__':
         [7,8,9]
     )
     M.add_rows([1,2,3])
-    M.show_matrix()
     
-
-    
-
+    Mat = Matrix.get_empty_matrix(3,4)
+    Mat.show_matrix()
     
