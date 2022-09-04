@@ -40,7 +40,7 @@ class Matrix:
         """
         Adds columns to a matrix object
         """
-        #Case when matrix is empty
+        # Case when matrix is empty
         if self.rows == 0:
             first_col = columns[0]
             for entry in first_col:
@@ -49,13 +49,12 @@ class Matrix:
                 if index > 0:
                     for index,value in enumerate(column):
                         self.matrix[index].append(value)
+            self.rows = len(columns[0])
         # Otherwise.
         else:
             for column in columns:
                 for index,value in enumerate(column):
-                    self.matrix[index].append(value)
-
-                
+                    self.matrix[index].append(value)                
         return f"{len(columns)} columns added!"
 
     def change_entry(self,row,column,new_value):
@@ -369,7 +368,6 @@ class Vector:
         master = Matrix()
         for vector in vectors:
             v_listified = Vector.unpack_vector(vector)
-            print(v_listified)
             master.add_columns(v_listified)
         return master
 
@@ -378,10 +376,9 @@ class Vector:
     
 
 if __name__ == '__main__':
-    a = Vector(1,1,1)
-    b = Vector(1,3,1)
-    c = Vector(1,1,1)
-    # print(Vector.get_matrix_from_vectors(a,b,c))
+    a = Vector(1,2,3)
+    b = Vector(4,5,6)
+    c = Vector(7,8,9)
     d = a + b + c
     unpacked_d = Vector.unpack_vector(d)
     e = Vector.get_dot_product(a,b)
@@ -394,20 +391,10 @@ if __name__ == '__main__':
         [7,8,9]
     )
     M = Matrix()
-    M.add_columns([0,0,0],[1,1,1])
+    M.add_columns([0,0,0])
+    print(M.rows)
+    M.add_columns([1,1,1])
     M.show_matrix()
-    # # Z = M.get_transpose()
-    # # print(Z.matrix)
-    # T = Matrix.get_empty_matrix(3,3).matrix
-    # Ma = M.matrix
-    # # for i in range(M.rows):
-    # #     print(f"row: {i}")
-    # #     for j in range(M.columns):
-    # #         print(f"col: {j}")
-    # #         T[j][i] = Ma[i][j]
-    # #         print(T[0][0])
-    # print(T)
-    
 
 
 
