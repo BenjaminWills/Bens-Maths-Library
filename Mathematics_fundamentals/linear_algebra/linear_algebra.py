@@ -1,4 +1,3 @@
-import collections
 import numpy as np
 
 
@@ -90,12 +89,12 @@ class Matrix:
         Will find the transpose of any matrix inputted. i.e will make the rows into columns and visa
         versa. The element at index [i,j] goes to [j,i] for all i in rows and j in columns.
         """
-        transpose = Matrix.get_empty_matrix(self.columns, self.rows)
-        for i in range(self.rows):
-            for j in range(self.columns):
-                print(f"""entry {j+1,i+1} is {self.matrix[i][j]}""")
-                transpose.change_entry(i,j,self.matrix[i][j])
+        transpose = Matrix()
+        rows = self.matrix
+        for row in rows:
+            transpose.add_columns(row)
         return transpose
+
 
     def get_dot_product(self, vector1, vector2) -> float:
         """
@@ -357,14 +356,8 @@ class Vector:
     @staticmethod
     def get_matrix_from_vectors(*vectors):
         """
-        Will make a matrix from vectors.
+        Will make a matrix from vectors. Vectors go to columns.
         """
-        # master = vectors[0].vector
-        # for j in range(1,len(vectors)):
-        #     v = vectors[j].vector
-        #     for index,value in enumerate(v):
-        #         master[index] += v[index]
-        # return master
         master = Matrix()
         for vector in vectors:
             v_listified = Vector.unpack_vector(vector)
@@ -390,12 +383,7 @@ if __name__ == '__main__':
         [4,5,6],
         [7,8,9]
     )
-    M = Matrix()
-    M.add_columns([0,0,0])
-    print(M.rows)
-    M.add_columns([1,1,1])
-    M.show_matrix()
-
+    print(M.get_transpose().show_matrix())
 
 
 
