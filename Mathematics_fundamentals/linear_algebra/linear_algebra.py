@@ -1,5 +1,4 @@
-# from os import stat
-# from os import stat
+import collections
 import numpy as np
 
 
@@ -41,9 +40,22 @@ class Matrix:
         """
         Adds columns to a matrix object
         """
-        for column in columns:
-            for index,value in enumerate(column):
-                self.matrix[index].append(value)
+        #Case when matrix is empty
+        if self.rows == 0:
+            first_col = columns[0]
+            for entry in first_col:
+                self.matrix.append([entry])
+            for index,column in enumerate(columns):
+                if index > 0:
+                    for index,value in enumerate(column):
+                        self.matrix[index].append(value)
+        # Otherwise.
+        else:
+            for column in columns:
+                for index,value in enumerate(column):
+                    self.matrix[index].append(value)
+
+                
         return f"{len(columns)} columns added!"
 
     def change_entry(self,row,column,new_value):
@@ -51,6 +63,7 @@ class Matrix:
         Will change an entry in a matrix
         """
         self.matrix[row][column] = new_value
+        
         return f"Index ({row},{column}) changed to {new_value}"
 
     @staticmethod
@@ -73,17 +86,16 @@ class Matrix:
         matrix.add_rows(*empty_rows)
         return matrix
 
-    def get_transpose(self, mat1):
+    def get_transpose(self):
         """
         Will find the transpose of any matrix inputted. i.e will make the rows into columns and visa
         versa. The element at index [i,j] goes to [j,i] for all i in rows and j in columns.
         """
-        rows = len(mat1)
-        columns = len(mat1[0])
-        transpose = self.get_empty_matrix(columns, rows)
-        for i in range(rows):
-            for j in range(columns):
-                transpose[j][i] = mat1[i][j]
+        transpose = Matrix.get_empty_matrix(self.columns, self.rows)
+        for i in range(self.rows):
+            for j in range(self.columns):
+                print(f"""entry {j+1,i+1} is {self.matrix[i][j]}""")
+                transpose.change_entry(i,j,self.matrix[i][j])
         return transpose
 
     def get_dot_product(self, vector1, vector2) -> float:
@@ -342,6 +354,25 @@ class Vector:
             [v1*w2 - v2*w3]
         ]
         return cross_vector
+    
+    @staticmethod
+    def get_matrix_from_vectors(*vectors):
+        """
+        Will make a matrix from vectors.
+        """
+        # master = vectors[0].vector
+        # for j in range(1,len(vectors)):
+        #     v = vectors[j].vector
+        #     for index,value in enumerate(v):
+        #         master[index] += v[index]
+        # return master
+        master = Matrix()
+        for vector in vectors:
+            v_listified = Vector.unpack_vector(vector)
+            print(v_listified)
+            master.add_columns(v_listified)
+        return master
+
 
     
     
@@ -350,6 +381,7 @@ if __name__ == '__main__':
     a = Vector(1,1,1)
     b = Vector(1,3,1)
     c = Vector(1,1,1)
+    # print(Vector.get_matrix_from_vectors(a,b,c))
     d = a + b + c
     unpacked_d = Vector.unpack_vector(d)
     e = Vector.get_dot_product(a,b)
@@ -361,8 +393,23 @@ if __name__ == '__main__':
         [4,5,6],
         [7,8,9]
     )
-    M.add_rows([1,2,3])
+    M = Matrix()
+    M.add_columns([0,0,0],[1,1,1])
+    M.show_matrix()
+    # # Z = M.get_transpose()
+    # # print(Z.matrix)
+    # T = Matrix.get_empty_matrix(3,3).matrix
+    # Ma = M.matrix
+    # # for i in range(M.rows):
+    # #     print(f"row: {i}")
+    # #     for j in range(M.columns):
+    # #         print(f"col: {j}")
+    # #         T[j][i] = Ma[i][j]
+    # #         print(T[0][0])
+    # print(T)
     
-    Mat = Matrix.get_empty_matrix(3,4)
-    Mat.show_matrix()
+
+
+
+
     
