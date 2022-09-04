@@ -18,6 +18,38 @@ class Matrix:
         else:
             self.columns = 0
 
+    def __mul__(self,other):
+        """
+        Matrix multiplication works by multiplying rows by columns pairwise. Thus if mat1
+        does not have the same number of rows as mat2 does columns, we cannot multiply them.
+
+        Note: mat1 will be a list of lists to simulate a matrix:
+            mat1 = [ [1,2,3]
+                     [4,5,6]
+                     [7,8,9]   ] 3x3 matrix.
+        For example.
+
+        In essence we can only multiply matrices with dimensions n x k and k x m, the resulting matrix
+        will have dimension n x m. The plan is to transpose mat2 and then simply make the [i,j] element
+        of the new matrix equal to the dot product of the i'th row of mat1 and the j'th column of mat2
+        (which is the j'th row of mat2 transpose).
+        """
+        mat1_rows = self.rows
+        mat1_columns = self.columns
+        mat2_rows = other.rows
+        mat2_columns = other.columns
+        if mat1_columns != mat2_rows:
+            raise TypeError(f"Error! Matrix one has {mat1_columns} columns and matrix two has {mat2_rows} rows.")
+        mat2_transpose = other.get_transpose()
+        multiplied_matrix = Matrix.get_empty_matrix(mat1_rows, mat2_columns)
+        for row_index, row1 in enumerate(self.matrix):
+            for column_index, row2 in enumerate(mat2_transpose.matrix):
+                multiplied_matrix.change_entry(row_index,column_index,Vector.get_dot_product(
+                    Vector(*row1), Vector(*row2))
+                )
+        return multiplied_matrix
+
+
     def show_matrix(self):
         """
         Gives visual representation of a matrix.
@@ -358,11 +390,11 @@ class Vector:
         """
         Will make a matrix from vectors. Vectors go to columns.
         """
-        master = Matrix()
+        matrix = Matrix()
         for vector in vectors:
             v_listified = Vector.unpack_vector(vector)
-            master.add_columns(v_listified)
-        return master
+            matrix.add_columns(v_listified)
+        return matrix
 
 
     
@@ -383,7 +415,13 @@ if __name__ == '__main__':
         [4,5,6],
         [7,8,9]
     )
-    print(M.get_transpose().show_matrix())
+    I = Matrix(
+        [1,0,0],
+        [0,1,0],
+        [0,0,1]
+    )
+    p =M.get_transpose()
+    p.show_matrix()
 
 
 
