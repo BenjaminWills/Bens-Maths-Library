@@ -33,16 +33,34 @@ class Matrix:
         of the new matrix equal to the dot product of the i'th row of mat1 and the j'th column of mat2
         (which is the j'th row of mat2 transpose).
         """
-        matrix = Matrix()
-        mat2_transpose = other.get_transpose()
-        for row,row_vector in enumerate(self.matrix):
+        if isinstance(other,Matrix):
+            matrix = Matrix()
+            mat2_transpose = other.get_transpose()
+            for row,row_vector in enumerate(self.matrix):
+                row_to_add = []
+                for column,column_vector in enumerate(mat2_transpose.matrix):
+                    v1 = Vector(*row_vector)
+                    v2 = Vector(*column_vector)
+                    row_to_add.append(Vector.get_dot_product(v1,v2))
+                matrix.add_rows(row_to_add)
+            return matrix
+
+        if isinstance(other,Vector):
             row_to_add = []
-            for column,column_vector in enumerate(mat2_transpose.matrix):
+            for row,row_vector in enumerate(self.matrix):
                 v1 = Vector(*row_vector)
-                v2 = Vector(*column_vector)
-                row_to_add.append(Vector.get_dot_product(v1,v2))
-            matrix.add_rows(row_to_add)
-        return matrix
+                row_to_add.append(Vector.get_dot_product(v1,other))
+            return Vector(*row_to_add)
+
+        else:
+            matrix = Matrix()
+            for i in range(self.rows):
+                row = []
+                for j in range(self.columns):
+                    row.append(other*self.matrix[i][j])
+                matrix.add_rows(row)
+            return matrix
+
 
     def show_matrix(self):
         """
@@ -122,45 +140,14 @@ class Matrix:
             transpose.add_columns(row)
         return transpose
     
-    def matrix_multiply(self, mat1, mat2):
-        """
-        Matrix multiplication works by multiplying rows by columns pairwise. Thus if mat1
-        does not have the same number of rows as mat2 does columns, we cannot multiply them.
-
-        Note: mat1 will be a list of lists to simulate a matrix:
-            mat1 = [ [1,2,3]
-                     [4,5,6]
-                     [7,8,9]   ] 3x3 matrix.
-        For example.
-
-        In essence we can only multiply matrices with dimensions n x k and k x m, the resulting matrix
-        will have dimension n x m. The plan is to transpose mat2 and then simply make the [i,j] element
-        of the new matrix equal to the dot product of the i'th row of mat1 and the j'th column of mat2
-        (which is the j'th row of mat2 transpose).
-        """
-        mat1_rows = len(mat1)
-        mat1_columns = len(mat1[0])
-        mat2_rows = len(mat2)
-        mat2_columns = len(mat2[0])
-        if mat1_columns != mat2_rows:
-            return f"Error! Matrix one has {mat1_columns} columns and matrix two has {mat2_rows} rows."
-        mat2_transpose = self.get_transpose(mat2)
-        multiplied_matrix = self.get_empty_matrix(mat1_rows, mat2_columns)
-        for row_index, row1 in enumerate(mat1):
-            for column_index, row2 in enumerate(mat2_transpose):
-                multiplied_matrix[row_index][column_index] = self.get_dot_product(
-                    row1, row2
-                )
-        return multiplied_matrix
-
     def transform_function(self, x, function, matrix):
         """
         Will transform points of a function by using an inputted matrix transformation.
         """
         co_ordinate = [[x], [function(x)]]
-        new_co_ordinate = self.matrix_multiply(matrix, co_ordinate)
+        new_co_ordinate = matrix*co_ordinate
         output = []
-        for element in new_co_ordinate:
+        for element in new_co_ordinate.matrix:
             output.append(element[0])
         return output
 
@@ -172,63 +159,56 @@ class Matrix:
         outputs = []
         for co_ordinates in function(x):
             co_ordinate = [[x], [co_ordinates]]
-            new_co_ordinate = self.matrix_multiply(matrix, co_ordinate)
+            new_co_ordinate = matrix*co_ordinate
             outputs.append([new_co_ordinate[0], new_co_ordinate[1]])
         return outputs
 
-    def get_2_d_determinant(self, matrix):
-        """
-        The n x n dimensional determinant can be found recursively from the root determinant,
-        the 2 x 2 determinant.
-        """
-        determinant = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-        return determinant
-
-    def get_determinant(self, matrix):
+    def get_determinant(self):
         """
         Gets determinant of an n x n matrix.
         """
-        return np.linalg.det(matrix)
+        return np.linalg.det(self.matrix)
 
-    def get_inverted_matrix(self, matrix):
+    def get_inverted_matrix(self):
         """
         Inverts n x n matrix that is non singular.
         """
-        rows = len(matrix)
-        empty_matrix = self.get_empty_matrix(rows, rows)
-        inv = np.linalg.inv(matrix)
-        for i in range(rows):
-            for j in range(rows):
-                empty_matrix[i][j] = inv[i][j]
+        empty_matrix = Matrix()
+        inv = np.linalg.inv(self.matrix)
+        for i in range(self.rows):
+            row_to_add = []
+            for j in range(self.rows):
+                row_to_add.append(inv[i][j])
+            empty_matrix.add_rows(row_to_add)
         return empty_matrix
 
-    def get_eigenvalues(self, matrix):
+    def get_eigenvalues(self):
         """
         Will get the eigenvalues of a matrix
         """
-        return np.linalg.eigvals(matrix)[0]
+        return np.linalg.eigvals(self.matrix)[0]
 
-    def get_eigenvectors(self, matrix):
+    def get_eigenvectors(self):
         """
         Will get the eigenvectors of a matrix
         """
-        return np.linalg.eig(matrix)[1]
+        return np.linalg.eig(self.matrix)[1]
 
-    def diagonalise_matrix(self,matrix):
+    def diagonalise_matrix(self):
         """
         Will diagonalise a matrix if that is possible (i.e if all eigenvalues are non degenerate.)
         """
 
 
-    def solve_system_of_equations(self, matrix, vector):
+    def solve_system_of_equations(self, vector):
         """
         Solving Ax = b, where x is a vector of unkowns, so x = inv(A)b.
         Only works when x has the same length as A and A is non singular.
         """
-        if len(matrix) != len(vector) or self.get_determinant(matrix) == 0:
-            return "Error! Invalid vector or singular matrix entered."
-        matrix_inverse = self.get_inverted_matrix(matrix)
-        return self.matrix_multiply(matrix_inverse, vector)
+        if self.rows != len(vector.vector) or self.get_determinant() == 0:
+            raise TypeError("Error! Invalid vector or singular matrix entered.")
+        matrix_inverse = self.get_inverted_matrix()
+        return matrix_inverse * vector
 
 class Vector:
 
@@ -381,7 +361,8 @@ if __name__ == '__main__':
         [0,1,0],
         [0,0,1]
     )
-    Z = I*I
-    Z.show_matrix()
+    Z = I*Vector(1,1,1)
+    Z.show_vector()
+
 
     
