@@ -4,8 +4,7 @@ import numpy as np
 class Matrix:
 
     """
-    In this class I intend to implement all of linear algebra so that it can be applied to
-    future projects.
+    The Matrix object and associated functions.
     """
 
     def __init__(self,*args:list):
@@ -34,21 +33,16 @@ class Matrix:
         of the new matrix equal to the dot product of the i'th row of mat1 and the j'th column of mat2
         (which is the j'th row of mat2 transpose).
         """
-        mat1_rows = self.rows
-        mat1_columns = self.columns
-        mat2_rows = other.rows
-        mat2_columns = other.columns
-        if mat1_columns != mat2_rows:
-            raise TypeError(f"Error! Matrix one has {mat1_columns} columns and matrix two has {mat2_rows} rows.")
+        matrix = Matrix()
         mat2_transpose = other.get_transpose()
-        multiplied_matrix = Matrix.get_empty_matrix(mat1_rows, mat2_columns)
-        for row_index, row1 in enumerate(self.matrix):
-            for column_index, row2 in enumerate(mat2_transpose.matrix):
-                multiplied_matrix.change_entry(row_index,column_index,Vector.get_dot_product(
-                    Vector(*row1), Vector(*row2))
-                )
-        return multiplied_matrix
-
+        for row,row_vector in enumerate(self.matrix):
+            row_to_add = []
+            for column,column_vector in enumerate(mat2_transpose.matrix):
+                v1 = Vector(*row_vector)
+                v2 = Vector(*column_vector)
+                row_to_add.append(Vector.get_dot_product(v1,v2))
+            matrix.add_rows(row_to_add)
+        return matrix
 
     def show_matrix(self):
         """
@@ -65,6 +59,7 @@ class Matrix:
         """
         for row in rows:
             self.matrix.append(row)
+        # self.rows = len(self.matrix)
         return f"{len(rows)} rows added!"
     
     def add_columns(self,*columns):
@@ -126,65 +121,7 @@ class Matrix:
         for row in rows:
             transpose.add_columns(row)
         return transpose
-
-
-    def get_dot_product(self, vector1, vector2) -> float:
-        """
-        Calculates the dot product between two vectors of equal length.
-        """
-        v_1_length = len(vector1)
-        v_2_length = len(vector2)
-        if v_1_length != v_2_length:
-            return f"""Error! Vector 1 has length {v_1_length}, and vector 2 has length {v_2_length}. 
-            These must be equal."""
-        sum = 0
-        for i in range(v_2_length):
-            sum += vector1[i] * vector2[i]
-        return sum
     
-    def unpack_vector(self,vector):
-        """
-        Will unpack a vector into its components.
-        """
-        unpacked_vector = []
-        for i in vector:
-            unpacked_vector.append(i[0])
-        return unpacked_vector
-    
-    def get_cross_product(self,vector1,vector2):
-        """
-        Will calculate the cross product between two vectors. These vectors must be three dimensional.
-        note vectors must be in the form of:
-        v = [
-            [v1],
-            [v2],
-            [v3]
-        ]
-        """
-        v1,v2,v3 = self.unpack_vector(vector1)
-        w1,w2,w3 = self.unpack_vector(vector2)
-
-        cross_vector = [
-            [v2*w3 - v3*w2],
-            [v3*w1 - v1*w3],
-            [v1*w2 - v2*w3]
-        ]
-        return cross_vector
-    
-    def matrix_from_vectors(self,*args):
-        """
-        Creating a matrix from vectors passed in as args. Note that we can only do this if all the inputted vectors
-        have the right shape.
-        """
-        columns = len(args)
-        rows = len(args[0])
-        matrix = self.get_empty_matrix(rows,columns)
-        for column,vector in enumerate(args):
-            for row in range(rows):
-                matrix[row][column] = vector[row]
-        return matrix
-
-
     def matrix_multiply(self, mat1, mat2):
         """
         Matrix multiplication works by multiplying rows by columns pairwise. Thus if mat1
@@ -313,7 +250,32 @@ class Vector:
             return Vector(*packed_args)
         else:
             raise TypeError('Dimensions not equal.')
-                
+
+    def __sub__(self,other):
+        """
+        Will subtract vectors component wise, only if they're the same shape.
+        """
+        v1 = self.vector
+        v2 = other.vector
+        dimv1 = len(v1)
+        dimv2 = len(v2)
+        packed_args = []
+        if dimv1 == dimv2:
+            for i in range(dimv1):
+                packed_args.append(v1[i][0] - v2[i][0])
+            return Vector(*packed_args)
+        else:
+            raise TypeError('Dimensions not equal.')
+
+    def __mul__(self,other):
+        """
+        Scalar multiplication for vectors, so other is a number.
+        """
+        new_components = []
+        for component in self.vector:
+            new_components.append(component[0] * other)
+        return Vector(new_components)
+
     def change_entry(self,new_entry,index):
         self.vector[index] = [new_entry]
         return f"Entry changed to {new_entry}"
@@ -340,10 +302,10 @@ class Vector:
         """
         Calculates the dot product between two vectors of equal length.
         """
-        v_1_dim = len(vector1.vector)
-        v_2_dim = len(vector2.vector)
         v1 = vector1.vector
         v2 = vector2.vector
+        v_1_dim = len(v1)
+        v_2_dim = len(v2)
         if v_1_dim != v_2_dim:
             raise TypeError(f"""Vector 1 has length {v_1_dim}, and vector 2 has length {v_2_dim}. 
             These must be equal.""")
@@ -409,7 +371,6 @@ if __name__ == '__main__':
     e = Vector.get_dot_product(a,b)
     f = Vector.get_cross_product(a,b)
 
-
     M = Matrix(
         [1,2,3],
         [4,5,6],
@@ -420,9 +381,7 @@ if __name__ == '__main__':
         [0,1,0],
         [0,0,1]
     )
-    p =M.get_transpose()
-    p.show_matrix()
-
-
+    Z = I*I
+    Z.show_matrix()
 
     
