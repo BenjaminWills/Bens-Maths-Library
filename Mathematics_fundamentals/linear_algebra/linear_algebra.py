@@ -144,12 +144,9 @@ class Matrix:
         """
         Will transform points of a function by using an inputted matrix transformation.
         """
-        co_ordinate = [[x], [function(x)]]
+        co_ordinate = Vector(x,function(x))
         new_co_ordinate = matrix*co_ordinate
-        output = []
-        for element in new_co_ordinate.matrix:
-            output.append(element[0])
-        return output
+        return Vector.unpack_vector(new_co_ordinate)
 
     def transform_conic_function(self, x, function, matrix):
         """
@@ -158,9 +155,9 @@ class Matrix:
         """
         outputs = []
         for co_ordinates in function(x):
-            co_ordinate = [[x], [co_ordinates]]
+            co_ordinate = Vector(x, co_ordinates)
             new_co_ordinate = matrix*co_ordinate
-            outputs.append([new_co_ordinate[0], new_co_ordinate[1]])
+            outputs.append(Vector.unpack_vector(new_co_ordinate))
         return outputs
 
     def get_determinant(self):
@@ -337,10 +334,3 @@ class Vector:
             v_listified = Vector.unpack_vector(vector)
             matrix.add_columns(v_listified)
         return matrix
-
-
-    
-
-
-
-    
