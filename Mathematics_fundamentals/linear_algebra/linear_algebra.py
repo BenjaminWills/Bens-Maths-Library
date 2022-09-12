@@ -340,29 +340,7 @@ class Vector:
 
 
     
-    
 
-if __name__ == '__main__':
-    a = Vector(1,2,3)
-    b = Vector(4,5,6)
-    c = Vector(7,8,9)
-    d = a + b + c
-    unpacked_d = Vector.unpack_vector(d)
-    e = Vector.get_dot_product(a,b)
-    f = Vector.get_cross_product(a,b)
-
-    M = Matrix(
-        [1,2,3],
-        [4,5,6],
-        [7,8,9]
-    )
-    I = Matrix(
-        [1,0,0],
-        [0,1,0],
-        [0,0,1]
-    )
-    Z = I*Vector(1,1,1)
-    Z.show_vector()
 
 
     
