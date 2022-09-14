@@ -1,3 +1,4 @@
+from os import stat
 import numpy as np
 
 
@@ -196,21 +197,22 @@ class Matrix:
         Will diagonalise a matrix if that is possible (i.e if all eigenvalues are non degenerate.)
         """
 
-
-    def solve_system_of_equations(self, vector):
+    @staticmethod
+    def solve_system_of_equations(matrix, vector):
         """
         Solving Ax = b, where x is a vector of unkowns, so x = inv(A)b.
         Only works when x has the same length as A and A is non singular.
         """
-        if self.rows != len(vector.vector) or self.get_determinant() == 0:
+        if matrix.rows != len(vector.vector) or matrix.get_determinant() == 0:
             raise TypeError("Error! Invalid vector or singular matrix entered.")
-        matrix_inverse = self.get_inverted_matrix()
+        matrix_inverse = matrix.get_inverted_matrix()
         return matrix_inverse * vector
 
 class Vector:
 
     def __init__(self,*args:int):
         self.vector = [[arg] for arg in args]
+        self.dim = len(self.vector)
 
     def __add__(self,other):
         """
@@ -248,10 +250,17 @@ class Vector:
         """
         Scalar multiplication for vectors, so other is a number.
         """
-        new_components = []
-        for component in self.vector:
-            new_components.append(component[0] * other)
-        return Vector(new_components)
+        if isinstance(other,Matrix):
+            components = []
+            for row in other.matrix:
+                v = Vector(*row)
+                components.append(Vector.get_dot_product(v,self))
+            return Vector(*components)
+        else:
+            new_components = []
+            for component in self.vector:
+                new_components.append(1.0 * component[0] * other)
+            return Vector(*new_components)
 
     def change_entry(self,new_entry,index):
         self.vector[index] = [new_entry]
@@ -334,3 +343,16 @@ class Vector:
             v_listified = Vector.unpack_vector(vector)
             matrix.add_columns(v_listified)
         return matrix
+
+    def get_magnitude(self):
+        return np.sqrt(Vector.get_dot_product(self,self))
+
+    @staticmethod
+    def get_unit_vector(position:int,dimension:int):
+        """
+        Will get a unit vector, i.e a vector that is all zeros bar one one.
+        """
+        zeroes = [0]*dimension
+        basis_vector = Vector(*zeroes)
+        basis_vector.change_entry(1,position)
+        return basis_vector
