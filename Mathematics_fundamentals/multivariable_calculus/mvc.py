@@ -49,12 +49,22 @@ class MVC:
 
 class Vector_Calculus:
     
+    @property
+    def levi_civita_tensor(i:int,j:int,k:int) -> int:
+        """
+        Will return the (i,j,k) entry of the Levi Civita tensor.
+        Note i,j,k belong to the set {1,2,3}.
+        """
+        return(i-j)*(j-k)*(k-i)/2
+
     @staticmethod
     def find_ith_derivative(x:Vector,position:int,function:Callable) -> float:
         """
         Will find the derivative of the i'th component of a vector valued function
         i.e many co-ordinates to many co-ordinates.
         """
+        if position > x.dim:
+            return 0
         dx = 10 ** -5
         grad = function(x+Vector.get_unit_vector(position,x.dim)*dx) - function(x)
         component = Vector.unpack_vector(grad)[position]
@@ -65,24 +75,32 @@ class Vector_Calculus:
         """
         Will get the divergence of a vector field.
         """
+        output_dim = function(Vector(*[1]*x.dim)).dim
         gradients = [
             Vector_Calculus.find_ith_derivative(x,position,function)
-            for position in range(x.dim)
+            for position in range(output_dim)
             ]
         return sum(gradients)
 
+    @staticmethod
+    def get_curl(x:Vector,function:Callable) -> Vector:
+        pass
+
 
 if __name__ == '__main__':
-    def f(x): return x ** 2
-    def g(x): return x/2
+    def f(vector):
+        v = Vector.unpack_vector(vector)
+        return v[0] ** 2 + v[1]
+    def g(vector):
+        v = Vector.unpack_vector(vector)
+        return v[0]/2
 
     def F(vector):
-        x,y = Vector.unpack_vector(vector)
-        return Vector(f(x),g(y))
+        return Vector(f(vector),g(vector))
 
-    x = Vector(1,1,1,1)
-    def f(vector):
-        x,y,z,w = Vector.unpack_vector(vector)
-        return x ** 2 + y ** 2 + z ** 2 + w ** 2
-
-    print(MVC.get_laplacian(x,f))
+    # x = Vector(1,1,1,1)
+    # def f(vector):
+    #     x,y,z,w = Vector.unpack_vector(vector)
+    #     return x ** 2 + y ** 2 + z ** 2 + w ** 2
+    v = Vector(1,1,1,3,4,5,6)
+    print(Vector_Calculus.get_divergence(v,F))
