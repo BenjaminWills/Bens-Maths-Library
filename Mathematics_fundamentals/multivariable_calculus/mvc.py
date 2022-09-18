@@ -8,7 +8,10 @@ from linear_algebra import Vector,Matrix
 class MVC:
 
     @staticmethod
-    def get_partial_derivative(x:Vector,function:Callable,component:int) -> float:
+    def get_partial_derivative(
+        x:Vector,
+        function:Callable,
+        component:int) -> float:
         """
         Will get the derivative of a scalar valued function f(x,y,z,...) w.r.t the specified
         component
@@ -20,7 +23,9 @@ class MVC:
         return gradient
 
     @staticmethod
-    def get_gradient(x:Vector,function:Callable) -> Vector:
+    def get_gradient(
+        x:Vector,
+        function:Callable) -> Vector:
         """
         Will return a gradient vector of a scalar multivariate function. (the vector of partial derivatives)
         """
@@ -33,7 +38,9 @@ class MVC:
 
     
     @staticmethod
-    def get_hessian(x:Vector,function:Callable) -> Matrix:
+    def get_hessian(
+        x:Vector,
+        function:Callable) -> Matrix:
         """
         The hessian matrix contains the second derivatives of a function, the 
         (i,j) index of this matrix is the second derivative of the function w.r.t
@@ -59,7 +66,9 @@ class MVC:
         return hessian
 
     @staticmethod
-    def get_laplacian(x:Vector,function:Callable) -> float:
+    def get_laplacian(
+        x:Vector,
+        function:Callable) -> float:
         """
         Will return a laplacian of a scalar multivariate function. (the sum of second partial derivatives)
         """
@@ -69,7 +78,13 @@ class MVC:
 
             
     @staticmethod
-    def pure_gradient_descent(x:Vector,function:Callable):
+    def pure_gradient_descent(
+        x:Vector,
+        function:Callable,
+        alpha:float,
+        tolerance:float,
+        max_iterations:int = 1_000_000,
+        condition_number:bool = False) -> Vector:
         """
         For pure gradient descent, we have a few parameters that need defining:
             - x = starting vector
@@ -81,13 +96,59 @@ class MVC:
         (can be found from the eigenvalues.)
         """
         hessian = MVC.get_hessian(x,function)
-        # condition_number = 
-        pass
+        if condition_number:
+            eigenvalues = hessian.get_eigenvalues()
+            condition = max(eigenvalues)/min(eigenvalues)
+            print(condition)
+        iter_count = 0
+        x0 = x
+        while abs(MVC.get_gradient(x0,function).get_magnitude()) > tolerance:
+            iter_count += 1
+            gradient = MVC.get_gradient(x0,function)
+            x0 = x - gradient * alpha
+            if iter_count > max_iterations:
+                print(f"Exited, number of iterations > {max_iterations}")
+                break
+        print(f"iterations: {iter_count}")
+        return x0
 
+
+
+    @staticmethod
+    def pure_newton_method(
+        x:int,
+        function:Callable,
+        tolerance:float,
+        max_iterations:int = 1_000_000) -> Vector:
+        """
+        The pure newton method only works if the hessian at the point x is positive definite.
+        but we wont enforce that, as the problem is fixed with the hybrid newton-gradient method.
+
+        tolerance - Stopping condition
+        """
+        iter_count = 0
+        x0 = x
+        gradient = MVC.get_gradient(x0,function)
+        while abs(gradient.get_magnitude()) > tolerance:
+            iter_count += 1
+            gradient = MVC.get_gradient(x0,function)
+            hessian = MVC.get_hessian(x0,function)
+            inv_hessian = hessian.get_inverted_matrix()
+            x0 = x0 - inv_hessian * gradient
+            if iter_count > max_iterations:
+                print(f"Exited, number of iterations > {max_iterations}")
+                break
+        print(f"iterations: {iter_count}")
+        return x0    
+            
 class Vector_Calculus:
     
     @staticmethod
-    def levi_civita_tensor(i:int,j:int,k:int) -> int:
+    def levi_civita_tensor(
+        i:int,
+        j:int,
+        k:int) -> int:
+
         """
         Will return the (i,j,k) entry of the Levi Civita tensor.
         Note i,j,k belong to the set {1,2,3}.
@@ -95,7 +156,11 @@ class Vector_Calculus:
         return(i-j)*(j-k)*(k-i)/2
 
     @staticmethod
-    def get_ith_component_derivative(x:Vector,position:int,wrt:int,function:Callable) -> float:
+    def get_ith_component_derivative(
+        x:Vector,
+        position:int,
+        wrt:int,
+        function:Callable) -> float:
         """
         Will find the derivative of the position'th component of a vector valued function (i.e many co-ordinates to many co-ordinates.) 
         w.r.t the specified co-ordinate.
@@ -108,7 +173,12 @@ class Vector_Calculus:
         return component/dx
         
     @staticmethod
-    def get_nth_derivative(x:Vector,order:int,w_r_t:tuple,function:Callable,position:int = -1):
+    def get_nth_derivative(
+        x:Vector,
+        order:int,
+        w_r_t:tuple,
+        function:Callable,
+        position:int = -1) -> float:
         """
         Will get the n'th derivative of a multivariate_function w.r.t a list of
         equal length to the order, eg second derivative w.r.t the first co-ordinate
@@ -130,7 +200,9 @@ class Vector_Calculus:
                 return Vector_Calculus.get_nth_derivative(x,order - 1,w_r_t,derivative_wrt_i,position)
 
     @staticmethod
-    def get_divergence(x:Vector,function:Callable) -> float:
+    def get_divergence(
+        x:Vector,
+        function:Callable) -> float:
         """
         Will get the divergence of a vector field.
         """
@@ -142,7 +214,9 @@ class Vector_Calculus:
         return sum(gradients)
 
     @staticmethod
-    def get_curl(x:Vector,function:Callable) -> Vector:
+    def get_curl(
+        x:Vector,
+        function:Callable) -> Vector:
         """
         Will find the curl of a vector valued function. 
         """
@@ -159,23 +233,11 @@ class Vector_Calculus:
 
 
 if __name__ == '__main__':
-    """
-    TEST: f(x,y) = x ** 2 + y
-
-    1st w.r.t x = 2x
-    2nd w.r.t x = 2
-    1st w.r.t y = 1
-    2nd w.r.t y = 0
-
-    PASSED.
-    """
-
     def F(vector):
         """
-        F(x) = SUM(x**2)
+        F(x) = SUM(x**2) = x ** 2 + y ** 2 (THIS IS A CONVEX FUNCTION)
         """
         return Vector.get_dot_product(vector,vector)
-    x = Vector(1,1,1,1,1,1,1)
-    hessian = MVC.get_hessian(x,F)    
-
+    x = Vector(1,1,1)
+    MVC.pure_newton_method(x,F,10 ** -5).show_vector()
         
