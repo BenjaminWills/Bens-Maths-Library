@@ -167,18 +167,20 @@ class Matrix:
         """
         return np.linalg.det(self.matrix)
 
+    @staticmethod
+    def numpy_to_matrix(np_matrix):
+        ben_matrix = Matrix()
+        rows,columns = np_matrix.shape
+        for row in range(rows):
+            ben_matrix.add_rows(np_matrix[row,:])
+        return ben_matrix
+
     def get_inverted_matrix(self):
         """
         Inverts n x n matrix that is non singular.
         """
-        empty_matrix = Matrix()
-        inv = np.linalg.inv(self.matrix)
-        for i in range(self.rows):
-            row_to_add = []
-            for j in range(self.rows):
-                row_to_add.append(inv[i][j])
-            empty_matrix.add_rows(row_to_add)
-        return empty_matrix
+        inv = Matrix.numpy_to_matrix(np.linalg.inv(self.matrix))
+        return inv
 
     def get_eigenvalues(self):
         """
@@ -190,12 +192,13 @@ class Matrix:
         """
         Will get the eigenvectors of a matrix
         """
-        return np.linalg.eig(self.matrix)[1]
+        return Matrix.numpy_to_matrix(np.linalg.eig(self.matrix)[1])
 
     def diagonalise_matrix(self):
         """
         Will diagonalise a matrix if that is possible (i.e if all eigenvalues are non degenerate.)
         """
+
 
     @staticmethod
     def solve_system_of_equations(matrix, vector):
