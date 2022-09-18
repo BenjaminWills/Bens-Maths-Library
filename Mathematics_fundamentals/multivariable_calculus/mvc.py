@@ -1,12 +1,9 @@
-from ast import Call
-from gc import callbacks
-from os import stat
 import sys
 from typing import Callable
 
 sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/linear_algebra')
 
-from linear_algebra import Vector
+from linear_algebra import Vector,Matrix
 
 class MVC:
 
@@ -34,6 +31,33 @@ class MVC:
             gradient_list.append(partial_derivative)
         return Vector(*gradient_list)
 
+    
+    @staticmethod
+    def get_hessian(x:Vector,function:Callable) -> Matrix:
+        """
+        The hessian matrix contains the second derivatives of a function, the 
+        (i,j) index of this matrix is the second derivative of the function w.r.t
+        to i then to j. 
+
+        NOTE: This matrix will have outputs equal to the dimension of the input,
+        as all other entries would be zero.
+
+        NOTE TO BEN: could use symmetry to speed up.
+        """
+        matrix_dimension = x.dim
+        hessian = Matrix()
+        for i in range(matrix_dimension):
+            row = []
+            for j in range(matrix_dimension):
+                row.append(
+                    Vector_Calculus.get_nth_derivative(
+                        x,
+                        2,
+                        (i,j),
+                        function))
+            hessian.add_rows(row)
+        return hessian
+
     @staticmethod
     def get_laplacian(x:Vector,function:Callable) -> float:
         """
@@ -44,12 +68,25 @@ class MVC:
         return Vector_Calculus.get_divergence(x,gradient)
 
             
-    # @staticmethod
-    # def pure_gradient_descent(x:Vector,function:Callable,)
+    @staticmethod
+    def pure_gradient_descent(x:Vector,function:Callable):
+        """
+        For pure gradient descent, we have a few parameters that need defining:
+            - x = starting vector
+            - alpha = jump rate
+            - tolerance = stopping criterion
+            - max_iterations = max iterations before we terminate the program.
+
+        First we check the hessian, to see if it is positive or negative definite.
+        (can be found from the eigenvalues.)
+        """
+        hessian = MVC.get_hessian(x,function)
+        # condition_number = 
+        pass
 
 class Vector_Calculus:
     
-    @property
+    @staticmethod
     def levi_civita_tensor(i:int,j:int,k:int) -> int:
         """
         Will return the (i,j,k) entry of the Levi Civita tensor.
@@ -58,17 +95,39 @@ class Vector_Calculus:
         return(i-j)*(j-k)*(k-i)/2
 
     @staticmethod
-    def find_ith_derivative(x:Vector,position:int,function:Callable) -> float:
+    def get_ith_component_derivative(x:Vector,position:int,wrt:int,function:Callable) -> float:
         """
-        Will find the derivative of the i'th component of a vector valued function
-        i.e many co-ordinates to many co-ordinates.
+        Will find the derivative of the position'th component of a vector valued function (i.e many co-ordinates to many co-ordinates.) 
+        w.r.t the specified co-ordinate.
         """
         if position > x.dim:
             return 0
         dx = 10 ** -5
-        grad = function(x+Vector.get_unit_vector(position,x.dim)*dx) - function(x)
+        grad = function(x+Vector.get_unit_vector(wrt,x.dim)*dx) - function(x)
         component = Vector.unpack_vector(grad)[position]
         return component/dx
+        
+    @staticmethod
+    def get_nth_derivative(x:Vector,order:int,w_r_t:tuple,function:Callable,position:int = -1):
+        """
+        Will get the n'th derivative of a multivariate_function w.r.t a list of
+        equal length to the order, eg second derivative w.r.t the first co-ordinate
+        would have w_r_t = (0,0).
+        """
+        if position == -1:
+            if order == 1:
+                return MVC.get_partial_derivative(x,function,w_r_t[-1])
+            else:
+                def derivative_wrt_i(x):
+                    return MVC.get_partial_derivative(x,function,w_r_t[-order])
+                return Vector_Calculus.get_nth_derivative(x,order - 1,w_r_t,derivative_wrt_i)
+        else:
+            if order == 1:
+                return Vector_Calculus.get_ith_component_derivative(x,position,w_r_t[-1],position)
+            else:
+                def derivative_wrt_i(x):
+                    return Vector_Calculus.get_ith_component_derivative(x,position,w_r_t[-order],function)
+                return Vector_Calculus.get_nth_derivative(x,order - 1,w_r_t,derivative_wrt_i,position)
 
     @staticmethod
     def get_divergence(x:Vector,function:Callable) -> float:
@@ -77,30 +136,46 @@ class Vector_Calculus:
         """
         output_dim = function(Vector(*[1]*x.dim)).dim
         gradients = [
-            Vector_Calculus.find_ith_derivative(x,position,function)
+            Vector_Calculus.get_ith_component_derivative(x,position,position,function)
             for position in range(output_dim)
             ]
         return sum(gradients)
 
     @staticmethod
     def get_curl(x:Vector,function:Callable) -> Vector:
-        pass
+        """
+        Will find the curl of a vector valued function. 
+        """
+        curl = []
+        for i in range(3):
+            row_total = 0
+            for j in range(3):
+                for k in range(3):
+                    levi = Vector_Calculus.levi_civita_tensor(i+1,j+1,k+1) # List indexes are one less than actual indexes.
+                    if levi != 0:
+                        row_total += levi*Vector_Calculus.get_ith_component_derivative(x,j,k,function)
+            curl.append(row_total)
+        return Vector(*curl)
 
 
 if __name__ == '__main__':
-    def f(vector):
-        v = Vector.unpack_vector(vector)
-        return v[0] ** 2 + v[1]
-    def g(vector):
-        v = Vector.unpack_vector(vector)
-        return v[0]/2
+    """
+    TEST: f(x,y) = x ** 2 + y
+
+    1st w.r.t x = 2x
+    2nd w.r.t x = 2
+    1st w.r.t y = 1
+    2nd w.r.t y = 0
+
+    PASSED.
+    """
 
     def F(vector):
-        return Vector(f(vector),g(vector))
+        """
+        F(x) = SUM(x**2)
+        """
+        return Vector.get_dot_product(vector,vector)
+    x = Vector(1,1,1,1,1,1,1)
+    hessian = MVC.get_hessian(x,F)    
 
-    # x = Vector(1,1,1,1)
-    # def f(vector):
-    #     x,y,z,w = Vector.unpack_vector(vector)
-    #     return x ** 2 + y ** 2 + z ** 2 + w ** 2
-    v = Vector(1,1,1,3,4,5,6)
-    print(Vector_Calculus.get_divergence(v,F))
+        
