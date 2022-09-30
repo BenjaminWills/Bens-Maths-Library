@@ -123,7 +123,7 @@ class MVC:
     def backtrack(
         x:Vector,
         function:Callable,
-        grad:Vector,
+        direction:Vector,
         t:float = 1,
         alpha:float = 0.2,
         beta:float = 0.8
@@ -150,7 +150,8 @@ class MVC:
         float
             Finds a value of t that will guarantee decrease of the function.
         """
-        while function(x - grad*t) > function(x) + alpha * t * Vector.get_dot_product(grad,grad * -1):
+        grad = MVC.get_gradient(x,function)
+        while function(x - direction*t) > function(x) + alpha * t * Vector.get_dot_product(grad,direction * -1):
             t *= beta
         return t
 
@@ -200,6 +201,7 @@ class MVC:
             iter += 1
             if iter > max_iterations:
                 break
+        print(f'BACKTRACKING GRADIENT DESCENT iterations: {iter}')
         return x
 
     @staticmethod
@@ -228,6 +230,65 @@ class MVC:
                 break
         print(f"iterations: {iter_count}")
         return x0    
+
+    @staticmethod
+    def backtracking_newton_method(
+        x:Vector,
+        function:Callable,
+        tolerance:float,
+        beta:float = 0.8,
+        alpha:float = 0.2,
+        max_iterations:int = 10_000) -> Vector:
+        """Newton method with step sizes chosen by the backtracking line search,
+        note that this will only work for positive definite hessians. I.e almost
+        exclusively for convex functions.
+
+        Parameters
+        ----------
+        x : Vector
+            Starting vector
+        function : Callable
+            Function that we want to minimise
+        tolerance : float
+            Sufficient ending condition
+        beta : float, optional
+            The backtracking decrease rate (always between 0 and 1), by default 0.8
+        alpha : float, optional
+            backtracking coefficient (between 0 and 1), by default 0.2
+        max_iterations : int, optional
+            Maximum allowed condition before exiting the function, by default 10_000
+
+
+        Returns
+        -------
+        Vector
+            Minimised vector
+        """
+        iter_count = 0
+        x0 = x
+        gradient = MVC.get_gradient(x0,function)
+        while abs(gradient.get_magnitude()) > tolerance:
+            iter_count += 1
+
+            gradient = MVC.get_gradient(x0,function)
+            hessian = MVC.get_hessian(x0,function)
+            inv_hessian = hessian.get_inverted_matrix()
+
+            descent_direction = inv_hessian * gradient
+
+            t = MVC.backtrack(x,function,descent_direction,alpha = alpha,beta = beta)
+            x0 = x0 - descent_direction * t
+
+            if iter_count > max_iterations:
+                print(f"Exited, number of iterations > {max_iterations}")
+                break
+        print(f"BACKTRACKING NEWTON METHOD iterations: {iter_count}")
+        return x0    
+    
+
+    @staticmethod
+    def hybrid_backtracking_newton_gradient():
+        pass
             
 class Vector_Calculus:
     
@@ -327,9 +388,14 @@ if __name__ == '__main__':
 
 
     x = Vector(5,8)
-    min = MVC.backtracking_gradient_descent(
+    min1 = MVC.backtracking_gradient_descent(
         x,
         f,
         10 ** -5
     )
-    min.show_vector()
+    min2 = MVC.backtracking_newton_method(
+        x,
+        f,
+        10 ** -5
+    )
+    min1.show_vector(),min2.show_vector()
