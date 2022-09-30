@@ -2,7 +2,9 @@ pure:
   (single variable) calculus:
     - phase portrait
     - differential equations
-
+    - stochastic gradient descent
+    - backtracking gradient descent
+    - 
 probability:
 
 
