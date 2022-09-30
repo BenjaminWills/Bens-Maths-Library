@@ -1,12 +1,11 @@
 import sys
-from os import stat
 from typing import Callable
-from xmlrpc.client import Boolean
 
 sys.path.append('Mathematics_fundamentals/linear_algebra')
-sys.path.append('Mathematics_fundamentals/calculus/integration')
+sys.path.append('./Mathematics_fundamentals/calculus/integration')
 
 
+from integration import Integration
 from linear_algebra import Matrix, Vector
 
 
@@ -80,6 +79,11 @@ class MVC:
         def gradient(y:Vector):
             return MVC.get_gradient(y,function)
         return Vector_Calculus.get_divergence(x,gradient)
+
+    @staticmethod
+    def multidimensional_integral():
+        # TODO: generalise simpsons/trapezium rule to N dimensions  
+        pass
 
             
     @staticmethod
