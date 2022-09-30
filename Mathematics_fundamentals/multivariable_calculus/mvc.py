@@ -285,11 +285,88 @@ class MVC:
         print(f"BACKTRACKING NEWTON METHOD iterations: {iter_count}")
         return x0    
     
+    @staticmethod
+    def positive_checker(array:list) -> bool:
+        """Checks if all elements of an array are positive
+
+        Parameters
+        ----------
+        array : list
+            an array of numbers
+
+        Returns
+        -------
+        bool
+            True if all positive.
+        """
+        for element in array:
+            if element <= 0:
+                return False
+        return True
 
     @staticmethod
-    def hybrid_backtracking_newton_gradient():
-        pass
+    def hybrid_backtracking_newton_gradient(
+        x:Vector,
+        function:Callable,
+        tolerance:float,
+        beta:float = 0.8,
+        alpha:float = 0.2,
+        max_iterations:int = 10_000) -> Vector:
+        """Hybrid newton and gradient descent algorithm, this exists
+        so that we can utilise the fast convergence of the newton 
+        method for positive definite hessians and the reliability
+        of the gradient descent method for non positive definite
+        hessians.
+
+        Parameters
+        ----------
+        x : Vector
+            Initial point
+        function : Callable
+            Function that we wish to minimize
+        tolerance : float
+            Sufficient ending condition
+        beta : float, optional
+            The backtracking decrease rate (always between 0 and 1), by default 0.8
+        alpha : float, optional
+            backtracking coefficient (between 0 and 1), by default 0.2
+        max_iterations : int, optional
+            Maximum allowed condition before exiting the function, by default 10_000
+
+
+        Returns
+        -------
+        Vector
+            minimum
+        """
+        iter = 1
+        grad = MVC.get_gradient(x,function)
+        while abs(grad.get_magnitude()) > tolerance:
+            hessian = MVC.get_hessian(x,function)
+            eigenvalues = hessian.get_eigenvalues()
+            grad = MVC.get_gradient(x,function)
+
+            if MVC.positive_checker(eigenvalues):
+                # In this case we use newton method descent direction
+                # as hessian is positive definite.
+                inv_hessian = hessian.get_inverted_matrix()
+                descent_direction = inv_hessian * grad
             
+            else:
+                # Now we use gradient descent descent direction
+                descent_direction = grad
+
+            t = MVC.backtrack(x,function,descent_direction,alpha = alpha,beta = beta)
+            x = x - descent_direction * t 
+
+            iter += 1
+
+            if iter > max_iterations:
+                print('Max iterations exceeded')
+                break
+        print(f'HYBRID NEWTON GRADIENT METHOD iterations: {iter}')
+        return x
+
 class Vector_Calculus:
     
     @staticmethod
@@ -398,4 +475,9 @@ if __name__ == '__main__':
         f,
         10 ** -5
     )
-    min1.show_vector(),min2.show_vector()
+    min3 = MVC.hybrid_backtracking_newton_gradient(
+        x,
+        f,
+        10 ** -5
+    )
+    min1.show_vector(),min3.show_vector()
