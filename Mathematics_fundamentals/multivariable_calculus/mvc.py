@@ -3,10 +3,10 @@ from os import stat
 from typing import Callable
 from xmlrpc.client import Boolean
 
-sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/linear_algebra')
-sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/functions')
+sys.path.append('Mathematics_fundamentals/linear_algebra')
+sys.path.append('Mathematics_fundamentals/calculus/integration')
 
-from functions import Functions
+
 from linear_algebra import Matrix, Vector
 
 
