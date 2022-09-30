@@ -1,9 +1,14 @@
 import sys
+from os import stat
 from typing import Callable
+from xmlrpc.client import Boolean
 
 sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/linear_algebra')
+sys.path.append('/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/functions')
 
-from linear_algebra import Vector,Matrix
+from functions import Functions
+from linear_algebra import Matrix, Vector
+
 
 class MVC:
 
@@ -83,7 +88,7 @@ class MVC:
         function:Callable,
         alpha:float,
         tolerance:float,
-        max_iterations:int = 1_000_000,
+        max_iterations:int = 10_000,
         condition_number:bool = False) -> Vector:
         """
         For pure gradient descent, we have a few parameters that need defining:
@@ -105,21 +110,104 @@ class MVC:
         while abs(MVC.get_gradient(x0,function).get_magnitude()) > tolerance:
             iter_count += 1
             gradient = MVC.get_gradient(x0,function)
-            x0 = x - gradient * alpha
+            grad_mag = 1/(gradient.get_magnitude())
+            unit_gradient = gradient * grad_mag
+            x0 = x - unit_gradient * alpha
             if iter_count > max_iterations:
                 print(f"Exited, number of iterations > {max_iterations}")
                 break
         print(f"iterations: {iter_count}")
         return x0
 
+    @staticmethod
+    def backtrack(
+        x:Vector,
+        function:Callable,
+        grad:Vector,
+        t:float = 1,
+        alpha:float = 0.2,
+        beta:float = 0.8
+    ):
+        """_summary_
 
+        Parameters
+        ----------
+        x : Vector
+            Vector to start line backtracking search
+        function : Callable
+            function
+        grad : Vector
+            gradient of function at that point
+        t : float, optional
+            initial value of the learning rate, by default 1
+        alpha : float, optional
+            backtracking coefficient (between 0 and 1), by default 0.2
+        beta : float, optional
+            The backtracking decrease rate (always between 0 and 1), by default 0.8
+
+        Returns
+        -------
+        _type_
+            _description_
+        """
+        while function(x - grad*t) > function(x) + alpha * t * Vector.get_dot_product(grad,grad * -1):
+            t *= beta
+        return t
+
+    @staticmethod
+    def backtracking_gradient_descent(
+        x:Vector,
+        function:Callable,
+        tolerance:float,
+        beta:float = 0.8,
+        alpha:float = 0.2,
+        max_iterations:int = 10_000,
+        verbose:bool = False) -> Vector:
+        """
+        This version of gradient descent will calculate the learning rate at each step using the 
+        backtracking line search algorithm.
+
+        Parameters
+        ----------
+        x : Vector
+            Initial point
+        function : Callable
+            Function that we wish to minimize
+        tolerance : float
+            Sufficient ending condition
+        beta : float, optional
+            The backtracking decrease rate (always between 0 and 1), by default 0.8
+        alpha : float, optional
+            backtracking coefficient (between 0 and 1), by default 0.2
+        max_iterations : int, optional
+            Maximum allowed condition before exiting the function, by default 10_000
+        verbose : bool, optional
+            Will print out at each step, by default False
+
+        Returns
+        -------
+        Vector
+            co-ordinates of minimal vector
+        """
+        iter = 1
+        grad = MVC.get_gradient(x,function)
+        while(abs(grad.get_magnitude()) > tolerance):
+            grad = MVC.get_gradient(x,function)
+            t = MVC.backtrack(x,function,grad,alpha = alpha,beta = beta)
+            x = x - grad * t
+            if verbose:
+                print(f'at iteration {iter}, \n x is {x.vector}, \n the f(x) = {function(x)}, \n the gradient is {grad.vector}')
+            iter += 1
+            if iter > max_iterations:
+                break
+        return x
 
     @staticmethod
     def pure_newton_method(
         x:int,
         function:Callable,
         tolerance:float,
-        max_iterations:int = 1_000_000) -> Vector:
+        max_iterations:int = 10_000) -> Vector:
         """
         The pure newton method only works if the hessian at the point x is positive definite.
         but we wont enforce that, as the problem is fixed with the hybrid newton-gradient method.
@@ -233,11 +321,15 @@ class Vector_Calculus:
 
 
 if __name__ == '__main__':
-    def F(vector):
-        """
-        F(x) = SUM(x**2) = x ** 2 + y ** 2 (THIS IS A CONVEX FUNCTION)
-        """
-        return Vector.get_dot_product(vector,vector)
-    x = Vector(1,1,1)
-    MVC.pure_newton_method(x,F,10 ** -5).show_vector()
-        
+    def f(x):
+        v = Vector.unpack_vector(x)
+        return v[0] ** 2 + (v[1] + 1) ** 2
+
+
+    x = Vector(5,8)
+    min = MVC.backtracking_gradient_descent(
+        x,
+        f,
+        10 ** -5
+    )
+    min.show_vector()
