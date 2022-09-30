@@ -127,7 +127,7 @@ class MVC:
         t:float = 1,
         alpha:float = 0.2,
         beta:float = 0.8
-    ):
+    ) -> float:
         """_summary_
 
         Parameters
@@ -147,8 +147,8 @@ class MVC:
 
         Returns
         -------
-        _type_
-            _description_
+        float
+            Finds a value of t that will guarantee decrease of the function.
         """
         while function(x - grad*t) > function(x) + alpha * t * Vector.get_dot_product(grad,grad * -1):
             t *= beta
