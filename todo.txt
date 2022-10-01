@@ -1,5 +1,5 @@
 pure:
-  (single variable) calculus:
+  calculus:
     - phase portrait
     - differential equations
     - stochastic gradient descent
