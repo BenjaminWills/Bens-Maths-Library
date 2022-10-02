@@ -132,7 +132,7 @@ class MVC:
         alpha:float = 0.2,
         beta:float = 0.8
     ) -> float:
-        """_summary_
+        """Finds a value of t such that a decrease of the function is guaranteed.
 
         Parameters
         ----------
