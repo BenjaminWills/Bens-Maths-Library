@@ -2,7 +2,7 @@ import sys
 from typing import Callable
 
 sys.path.append('Mathematics_fundamentals/linear_algebra')
-sys.path.append('./Mathematics_fundamentals/calculus/integration')
+sys.path.append('Mathematics_fundamentals/calculus/integration')
 
 
 from integration import Integration
@@ -463,25 +463,4 @@ class Vector_Calculus:
 
 
 if __name__ == '__main__':
-    def f(x):
-        v = Vector.unpack_vector(x)
-        return v[0] ** 2 + (v[1] + 1) ** 2
-
-
-    x = Vector(5,8)
-    min1 = MVC.backtracking_gradient_descent(
-        x,
-        f,
-        10 ** -5
-    )
-    min2 = MVC.backtracking_newton_method(
-        x,
-        f,
-        10 ** -5
-    )
-    min3 = MVC.hybrid_backtracking_newton_gradient(
-        x,
-        f,
-        10 ** -5
-    )
-    min1.show_vector(),min3.show_vector()
+    pass
