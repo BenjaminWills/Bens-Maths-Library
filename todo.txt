@@ -4,11 +4,19 @@ pure:
     - differential equations
     - stochastic gradient descent
     - backtracking gradient descent
-    - 
+    
 probability:
-
+  - uniform distribution
+  - binomial distribution
+  - normal distribution
+  - chi square distribution
+  - T distribution
+  - exponential distribution 
+  - poisson distribution
+  
 
 statistics:
+  - sampling from any distribution
 
 mechanics:
 
