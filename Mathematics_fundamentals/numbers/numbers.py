@@ -103,3 +103,29 @@ class Real:
             else:
                 factor_dict[str(i)] += 1
         return factor_dict
+
+    @staticmethod
+    def n_choose_m(n:int,m:int) -> int:
+        """Will return the result of n choose m, i.e the number
+        of ways to choose m objects from a group of n objects.
+
+        Parameters
+        ----------
+        n : int
+        m : int
+
+        Returns
+        -------
+        int
+            the number of ways to choose m objects from a group of n objects
+
+        Raises
+        ------
+        error
+            If m > n we throw an error.
+        """
+        if m > n:
+            raise AttributeError(f'You cannot choose {m} items out of {n} items.')
+        numerator = Real.factorial(n)
+        denominator = Real.factorial(m) * Real.factorial(n-m)
+        return numerator/denominator
