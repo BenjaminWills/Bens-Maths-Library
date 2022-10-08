@@ -1,12 +1,8 @@
-import sys
 from typing import Callable
 
-sys.path.append('Mathematics_fundamentals/linear_algebra')
-sys.path.append('Mathematics_fundamentals/calculus/integration')
-
-
-from integration import Integration
-from linear_algebra import Matrix, Vector
+from Mathematics_fundamentals.calculus.integration import integration
+from Mathematics_fundamentals.linear_algebra.linear_algebra import (Matrix,
+                                                                    Vector)
 
 
 class MVC:

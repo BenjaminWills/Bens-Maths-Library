@@ -1,5 +1,6 @@
-from complex import Complex
 import numpy as np
+
+from Mathematics_fundamentals.numbers.complex import Complex
 
 
 class Real:

@@ -1,15 +1,12 @@
-import sys
-
-sys.path.append("/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals")
-
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.widgets import Slider
 
-
-from linear_algebra.linear_algebra import Linalg
-from calculus.differentiation.differentiation import Differentiation
-from functions.functions import Functions
+from Mathematics_fundamentals.calculus.differentiation.differentiation import \
+    Differentiation
+from Mathematics_fundamentals.functions.functions import Functions
+from Mathematics_fundamentals.linear_algebra.linear_algebra import (Matrix,
+                                                                    Vector)
 
 plt.style.use("dark_background")
 

@@ -1,12 +1,9 @@
-import sys
 
-sys.path.append(
-    "/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers"
-)
-
-# from real import Real
-import numpy as np
 import math
+
+import numpy as np
+
+from Mathematics_fundamentals.numbers.real import Real
 
 
 class Differentiation:

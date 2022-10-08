@@ -1,11 +1,7 @@
-import sys
-
-sys.path.append(
-    "/Users/benwills/Desktop/personal_projects/Mathematics_fundamentals/numbers"
-)
 
 import numpy as np
-from complex import Complex
+
+from Mathematics_fundamentals.numbers.complex import Complex
 
 
 class Functions:
