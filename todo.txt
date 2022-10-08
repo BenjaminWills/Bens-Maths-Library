@@ -6,7 +6,6 @@ pure:
     - backtracking gradient descent
     
 probability:
-  - uniform distribution
   - binomial distribution
   - normal distribution
   - chi square distribution

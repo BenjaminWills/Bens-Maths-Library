@@ -1,4 +1,3 @@
-from os import stat
 import numpy as np
 
 
@@ -186,7 +185,7 @@ class Matrix:
         """
         Will get the eigenvalues of a matrix
         """
-        return np.linalg.eigvals(self.matrix)[0]
+        return np.linalg.eigvals(self.matrix)
 
     def get_eigenvectors(self):
         """
@@ -330,11 +329,11 @@ class Vector:
         w1,w2,w3 = Vector.unpack_vector(vector2)
 
         cross_vector = [
-            [v2*w3 - v3*w2],
-            [v3*w1 - v1*w3],
-            [v1*w2 - v2*w3]
+            v2*w3 - v3*w2,
+            v3*w1 - v1*w3,
+            v1*w2 - v2*w3
         ]
-        return cross_vector
+        return Vector(*cross_vector)
     
     @staticmethod
     def get_matrix_from_vectors(*vectors):

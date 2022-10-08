@@ -7,7 +7,7 @@ class Probability:
     """
 
     @staticmethod
-    def uniform_distribution(lower:float,upper:float) -> float:
+    def uniform_distribution_cdf(lower:float,upper:float,value:float) -> float:
         """Will return a value in the range [lower,upper] according to the
         uniform distribution, in which each value is equally likely to be chosen with
         probability 1/(upper-lower).
@@ -24,9 +24,10 @@ class Probability:
         float
             
         """
-        if lower < upper:
-            return random.uniform(lower,upper)
+        if lower < value < upper:
+            return value * 1 / (upper-lower)
         else:
             raise TypeError('Lower is greater than or equal to upper.')
 
-    
+    @staticmethod
+    def binomial_distribution_cdf(number_of_samples:int,probability:float) -> 

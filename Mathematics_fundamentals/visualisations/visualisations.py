@@ -4,7 +4,6 @@ sys.path.append("/Users/benwills/Desktop/personal_projects/Mathematics_fundament
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
 
 
 from linear_algebra.linear_algebra import Linalg
