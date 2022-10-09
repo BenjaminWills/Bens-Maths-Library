@@ -299,9 +299,12 @@ class MVC:
         bool
             True if all positive.
         """
-        for element in array:
-            if element <= 0:
-                return False
+        if isinstance(array,list):
+            for element in array:
+                if element <= 0:
+                    return False
+        else:
+            if array <= 0: return False
         return True
 
     @staticmethod
@@ -311,7 +314,8 @@ class MVC:
         tolerance:float,
         beta:float = 0.8,
         alpha:float = 0.2,
-        max_iterations:int = 10_000) -> Vector:
+        max_iterations:int = 10_000,
+        verbose:bool = False) -> Vector:
         """Hybrid newton and gradient descent algorithm, this exists
         so that we can utilise the fast convergence of the newton 
         method for positive definite hessians and the reliability
@@ -332,7 +336,8 @@ class MVC:
             backtracking coefficient (between 0 and 1), by default 0.2
         max_iterations : int, optional
             Maximum allowed condition before exiting the function, by default 10_000
-
+        verbose:
+            If True then will print iteration count at each 100th iteration
 
         Returns
         -------
@@ -360,7 +365,9 @@ class MVC:
             x = x - descent_direction * t 
 
             iter += 1
-
+            if verbose:
+                if iter % 100 == 0:
+                    print(iter)
             if iter > max_iterations:
                 print('Max iterations exceeded')
                 break

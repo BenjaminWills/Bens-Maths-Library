@@ -3,7 +3,7 @@ import math
 
 import numpy as np
 
-from Mathematics_fundamentals.numbers.real import Real
+from Mathematics_fundamentals.numbers.numbers import Real
 
 
 class Differentiation:
