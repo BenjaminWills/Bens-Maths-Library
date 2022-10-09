@@ -5,14 +5,14 @@ TRAIN_NUM = 700
 TEST_NUM = 200
 import csv
 
-from ..Mathematics_fundamentals.linear_algebra.linear_algebra import Vector
-from ..Mathematics_fundamentals.multivariable_calculus.mvc import MVC
+from Mathematics_fundamentals.linear_algebra.linear_algebra import Vector
+from Mathematics_fundamentals.multivariable_calculus.mvc import MVC
 
-with open("/Users/benwills/Desktop/personal_projects/test.csv", newline="") as f:
+with open("applications/test.csv", newline="") as f:
     reader = csv.reader(f)
     training_data = list(reader)
 
-with open("/Users/benwills/Desktop/personal_projects/train.csv", newline="") as f:
+with open("applications/train.csv", newline="") as f:
     reader = csv.reader(f)
     test_data = list(reader)
 
