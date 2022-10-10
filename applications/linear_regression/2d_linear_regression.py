@@ -2,7 +2,7 @@
 Linear regression beginning with 2-d
 """
 TRAIN_NUM = 700
-TEST_NUM = 200
+TEST_NUM = 250
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -31,7 +31,7 @@ optimal_values = MVC.hybrid_backtracking_newton_gradient(
     verbose=True,
     max_iterations=2000,
     beta = 0.3,
-    alpha = 0.1
+    alpha = 0.15
 )
 
 m, c = Vector.unpack_vector(optimal_values)
