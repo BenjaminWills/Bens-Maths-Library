@@ -53,7 +53,7 @@ class Probability:
         if lower < upper:
             return random.uniform(lower,upper)
         else:
-            raise TypeError('Lower is greater than or equal to upper.')
+            raise ValueError('Lower is greater than or equal to upper.')
 
     @staticmethod
     def binomial_pdf(probability:float,n:int,x:int) -> float:
