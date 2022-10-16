@@ -258,13 +258,13 @@ class Probability:
         ValueError
             Rate can only be > 0.
         """
-        if rate < 0:
+        if rate <= 0:
             raise ValueError('Rate < 0')
         return (rate ** x * Functions.exp(-rate))/Real.factorial(x)
 
     @staticmethod
     def poisson_cdf(rate:float,x:int) -> float:
-        """Will find the poisson pdf, which is the limiting case of the binomial distribution
+        """Will find the poisson cdf, which is the limiting case of the binomial distribution
         in which the number of samples, n approaches infinite.
 
         Parameters
@@ -292,6 +292,54 @@ class Probability:
             )
         return cdf
 
+    def exponential_pdf(rate:float,x:float) -> float:
+        """The exponential pdf, 
+
+        Parameters
+        ----------
+        rate : float
+            Rate of occurrence of event
+        x : float
+            Duration (usually)
+
+        Returns
+        -------
+        float
+            Probability that something happens in this event
+
+        Raises
+        ------
+        ValueError
+            Negative rate
+        """
+        if rate <= 0:
+            raise ValueError('Rate must be > 0')
+        if x <= 0:
+            return 0
+        return rate * Functions.exp(- rate * x)
+
+    def exponential_cdf(rate:float,x:float) -> float:
+        """The exponential cdf, 
+
+        Parameters
+        ----------
+        rate : float
+            Rate of occurrence of event
+        x : float
+            Duration (usually)
+
+        Returns
+        -------
+        float
+            Probability that something happens in this event
+
+        Raises
+        ------
+        ValueError
+            Negative rate
+        """
+        return 1 - Functions.exp(- rate * x)
+
 class Empirical_probability():
     @staticmethod
     def get_mean(data:list) -> float:
@@ -310,6 +358,7 @@ class Empirical_probability():
         n = len(data)
         sum = sum(data)
         return sum/n
+
     @staticmethod
     def get_variance(data:list) -> float:
         """The variance is the average square distance of data points 
