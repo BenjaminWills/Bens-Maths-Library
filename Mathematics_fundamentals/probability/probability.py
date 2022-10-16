@@ -107,7 +107,10 @@ class Probability:
         """
         cdf = 0
         for i in range(x+1):
-            cdf += Probability.binomial_pdf(probability,n,i)
+            cdf += Probability.binomial_pdf(
+                probability = probability,
+                n = n,
+                x = i)
         return cdf
 
     @staticmethod
@@ -159,11 +162,18 @@ class Probability:
         """
         integratable_pdf = lambda x : Probability.normal_pdf(x,mean,variance)
         return Integration.simpson_approximation(
-            integratable_pdf,
-            -10_000,
-            x,
-            10000
+            function = integratable_pdf,
+            start = -10_000,
+            end = x,
+            steps = 10000
         )
 
     @staticmethod
-    def 
+    def standard_normal_cdf(mean:float,variance:float,x:float) -> float:
+        if mean !=0 and variance != 1:
+            standardised_import = (x-mean)/np.sqrt(variance)
+        return Probability.normal_cdf(
+            mean=0,
+            variance=1,
+            x = standardised_import
+        )
