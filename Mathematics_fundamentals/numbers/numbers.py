@@ -1,4 +1,5 @@
 import numpy as np
+import scipy as sc
 
 
 class Complex:
@@ -129,3 +130,18 @@ class Real:
         numerator = Real.factorial(n)
         denominator = Real.factorial(m) * Real.factorial(n-m)
         return numerator/denominator
+
+    @staticmethod
+    def gamma(z:float) -> float:
+        """Returns the gamma function (z-1)!
+
+        Parameters
+        ----------
+        z : float
+
+        Returns
+        -------
+        float
+            (z-1)!
+        """
+        return sc.special.gamma(z)
