@@ -340,7 +340,71 @@ class Probability:
         """
         return 1 - Functions.exp(- rate * x)
 
-class Empirical_probability():
+    @staticmethod
+    def gamma_pdf(n:int,rate:float,x:float) -> float:
+        """Returns gamma pdf, the sum of n exponential variables
+        with rate: rate. I.e the amount of time taken for the k'th event to occur
+
+        Parameters
+        ----------
+        n : int
+            Number of occurrences
+        rate : float
+            Rate of event occurrence
+        x : float
+            Time taken for n occurrences to occur
+
+        Returns
+        -------
+        float
+            probability of n events occurring in x time
+
+        Raises
+        ------
+        ValueError
+            n,rate should be > 0
+        """
+        if n < 0 or rate < 0:
+            raise ValueError()
+        return ((rate ** n)/Real.gamma(n)) * (x ** (n-1)) * Functions.exp(-rate*x)
+    
+    @staticmethod 
+    def gamma_pdf(n:int,rate:float,x:float) -> float:
+        """Returns gamma pdf, the sum of n exponential variables
+        with rate: rate. I.e the amount of time taken for the k'th event to occur
+
+        Parameters
+        ----------
+        n : int
+            Number of occurrences
+        rate : float
+            Rate of event occurrence
+        x : float
+            Time taken for n occurrences to occur
+
+        Returns
+        -------
+        float
+            probability of n events occurring in <= x time
+
+        Raises
+        ------
+        ValueError
+            n,rate should be > 0
+        """
+        integrand = lambda z: Probability.gamma_pdf(
+            n = n,
+            rate = rate,
+            x = z
+        )
+        return Integration.simpson_approximation(
+            function = integrand,
+            start = -10_000,
+            end = x,
+            steps = 100_000
+        )
+
+class Empirical_probability:
     @staticmethod
     def get_mean(data:list) -> float:
         """Will find the mean of a list of data
