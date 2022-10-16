@@ -9,8 +9,6 @@ probability:
 
   - chi square distribution
   - T distribution
-  - exponential distribution 
-  - poisson distribution
   
 
 statistics:
