@@ -1,5 +1,7 @@
 import random
 
+from Mathematics_fundamentals.numbers.numbers import Real
+
 
 class Probability:
     """
@@ -30,19 +32,50 @@ class Probability:
 
     @staticmethod
     def binomial_pdf(probability:float,n:int,x:int) -> float:
-        """_summary_
+        """Will find the probability of finding exactly x occurances
+        of an event in a binomial distribution
 
         Parameters
         ----------
         probability : float
-            _description_
+            A number in (0,1] that defines the probability of success
         n : int
-            _description_
+            Number of samples
         x : int
-            _description_
+            Number of occurrences of event
 
         Returns
         -------
         float
-            _description_
+            The probability of x events happening with a probability p of success 
+            and n samples.
         """
+        if n < x or 0 < probability <= 1:
+            return TypeError("Invalid values entered.")
+        n_choose_x = Real.n_choose_m(n,x)
+        return n_choose_x * (probability ** x) * (1-probability) ** (n-x)
+
+    @staticmethod
+    def binomial_cdf(probability:float,n:int,x:int) -> float:
+        """Will find the probability of finding <= x occurrences
+        of an event in a binomial distribution
+
+        Parameters
+        ----------
+        probability : float
+            A number in (0,1] that defines the probability of success
+        n : int
+            Number of samples
+        x : int
+            Number of occurrences of event
+
+        Returns
+        -------
+        float
+            The probability of <= x events happening with a probability p of success 
+            and n samples.
+        """
+        cdf = 0
+        for i in range(x+1):
+            cdf += Probability.binomial_pdf(probability,n,i)
+        return cdf
