@@ -7,10 +7,9 @@ class Probability:
     """
 
     @staticmethod
-    def uniform_distribution(lower:float,upper:float) -> float:
-        """Will return a value in the range [lower,upper] according to the
-        uniform distribution, in which each value is equally likely to be chosen with
-        probability 1/(upper-lower).
+    def uniform_distribution_cdf(lower:float,upper:float,x:float) -> float:
+        """Will return the probability of finding a number x, within a uniform distribution
+        defined on the range [lower,upper].
 
         Parameters
         ----------
@@ -22,11 +21,28 @@ class Probability:
         Returns
         -------
         float
-            
+            probability that we find a number that is <= x.
         """
         if lower < upper:
             return random.uniform(lower,upper)
         else:
             raise TypeError('Lower is greater than or equal to upper.')
 
-    
+    @staticmethod
+    def binomial_pdf(probability:float,n:int,x:int) -> float:
+        """_summary_
+
+        Parameters
+        ----------
+        probability : float
+            _description_
+        n : int
+            _description_
+        x : int
+            _description_
+
+        Returns
+        -------
+        float
+            _description_
+        """
