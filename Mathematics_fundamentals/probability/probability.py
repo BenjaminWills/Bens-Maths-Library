@@ -12,6 +12,8 @@ class Probability:
     """
     A class that contains all things probability!
     """
+    
+
     @staticmethod
     def uniform_distribution_pdf(lower:float,upper:float) -> float:
         """_summary_
@@ -177,3 +179,22 @@ class Probability:
             variance=1,
             x = standardised_import
         )
+
+class Empirical_probability():
+
+    def get_mean(data:list) -> float:
+        """Will find the mean of a list of data
+
+        Parameters
+        ----------
+        data : list
+            A list of numbers
+
+        Returns
+        -------
+        float
+            The mean of the inputted list
+        """
+        n = len(data)
+        sum = sum(data)
+        return sum/n
