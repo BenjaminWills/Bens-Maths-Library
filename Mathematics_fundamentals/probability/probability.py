@@ -1,5 +1,7 @@
 import random
+import numpy as np
 
+from Mathematics_fundamentals.functions.functions import Functions
 from Mathematics_fundamentals.numbers.numbers import Real
 
 
@@ -105,4 +107,31 @@ class Probability:
             cdf += Probability.binomial_pdf(probability,n,i)
         return cdf
 
-    
+    @staticmethod
+    def normal_pdf(mean:float,variance:float,x:float) -> float:
+        """Returns the probability of choosing x in a normal distribution.
+
+        Parameters
+        ----------
+        mean : float
+            Mean value of normal distribution (horizontal shift)
+        variance : float
+            Variance of the normal distribution (stretch)
+        x : float
+            Value to evaluate probability of
+
+        Returns
+        -------
+        float
+            Probability of choosing exactly x in a normal distribution
+
+        Raises
+        ------
+        ValueError
+            Cannot have a negative variance.
+        """
+        if variance < 0:
+            raise ValueError("Variance can't be negative")
+        stretch_factor = 1/(np.sqrt(2 * np.pi * variance))
+        exponential_factor = -1/2 * ((x-mean)**2)/variance
+        return stretch_factor * Functions.exp(exponential_factor)
