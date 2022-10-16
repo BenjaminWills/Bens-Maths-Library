@@ -263,6 +263,34 @@ class Probability:
         return (rate ** x * Functions.exp(-rate))/Real.factorial(x)
 
     @staticmethod
+    def poisson_cdf(rate:float,x:int) -> float:
+        """Will find the poisson pdf, which is the limiting case of the binomial distribution
+        in which the number of samples, n approaches infinite.
+
+        Parameters
+        ----------
+        rate : float
+            The rate (number of events / period)
+        x : int
+            x events in a certain time period
+
+        Returns
+        -------
+        float
+            probability of seeing at most x events in a time period
+
+        Raises
+        ------
+        ValueError
+            Rate can only be > 0.
+        """
+        cdf = 0
+        for i in range(x+1):
+            cdf += Probability.poisson_pdf(
+                rate = rate,
+                x = i
+            )
+        return cdf
 
 class Empirical_probability():
     @staticmethod
