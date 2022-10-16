@@ -7,7 +7,6 @@ pure:
     
 probability:
 
-  - normal distribution
   - chi square distribution
   - T distribution
   - exponential distribution 
