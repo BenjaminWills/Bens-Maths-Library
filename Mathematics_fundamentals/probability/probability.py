@@ -180,8 +180,63 @@ class Probability:
             x = standardised_import
         )
     
+    @staticmethod 
+    def geometric_pdf(probability:float,x:int) -> float:
+        """The geometric pdf, the probability that you fail k times and then
+        have a success
 
+        Parameters
+        ----------
+        probability : float
+            probability of success
+        x : int
+            Number of failures before a success
 
+        Returns
+        -------
+        float
+            The probability of having x failures before a success
+
+        Raises
+        ------
+        ValueError
+            Probability must be in range [0,1] and x has to be > 0
+        """
+        if probability < 0 or x < 0 or probability > 1:
+            raise ValueError()
+        return probability * (1-probability) ** x
+
+    @staticmethod
+    def geometric_cdf(probability:float,x:int) -> float:
+        """The geometric cdf, the probability that you fail at most k times and then
+        have a success
+
+        Parameters
+        ----------
+        probability : float
+            probability of success
+        x : int
+            Number of failures before a success
+
+        Returns
+        -------
+        float
+            The probability of having at most x failures before a success
+
+        Raises
+        ------
+        ValueError
+            Probability must be in range [0,1] and x has to be > 0
+        """
+        cdf = 0
+        for i in range(x+1):
+            cdf += Probability.geometric_pdf(
+                probability=probability,
+                x = i
+                )
+        return cdf
+
+    
 class Empirical_probability():
 
     def get_mean(data:list) -> float:
