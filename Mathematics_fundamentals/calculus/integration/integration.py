@@ -20,7 +20,7 @@ class Integration:
         return funcval_at_start + 4 * funcval_at_mid + funcval_at_end
 
     @staticmethod
-    def simpson_approximation(self, function, start, end, steps):
+    def simpson_approximation(function, start, end, steps):
         area = 0
         width = (end - start) / steps
         for i in range(steps):
