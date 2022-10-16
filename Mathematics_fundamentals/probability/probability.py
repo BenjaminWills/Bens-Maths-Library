@@ -179,6 +179,8 @@ class Probability:
             variance=1,
             x = standardised_import
         )
+    
+
 
 class Empirical_probability():
 
@@ -198,3 +200,24 @@ class Empirical_probability():
         n = len(data)
         sum = sum(data)
         return sum/n
+
+    def get_variance(data:list) -> float:
+        """The variance is the average square distance of data points 
+        from the mean
+
+        Parameters
+        ----------
+        data : list
+            A list of numbers
+
+        Returns
+        -------
+        float
+            Variance
+        """
+        variance = 0
+        n = len(data)
+        mean = Empirical_probability.get_mean(data)
+        for data_point in data:
+            variance += (mean - data_point) ** 2
+        return variance / n
