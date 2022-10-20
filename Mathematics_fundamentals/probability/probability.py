@@ -446,7 +446,7 @@ class Empirical_probability:
             variance += (mean - data_point) ** 2
         return variance / n
 
-class sampling:
+class Sampling:
     def get_sample(N:int,inverted_distribution:Callable) -> list:
         """Will get a sample of size N using the uniform CDF method.
         i.e we generate a sample based on the inverse of the CDF in
