@@ -369,8 +369,8 @@ class Probability:
         return ((rate ** n)/Real.gamma(n)) * (x ** (n-1)) * Functions.exp(-rate*x)
     
     @staticmethod 
-    def gamma_pdf(n:int,rate:float,x:float) -> float:
-        """Returns gamma pdf, the sum of n exponential variables
+    def gamma_cdf(n:int,rate:float,x:float) -> float:
+        """Returns gamma cdf, the sum of n exponential variables
         with rate: rate. I.e the amount of time taken for the k'th event to occur
 
         Parameters
