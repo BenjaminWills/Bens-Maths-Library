@@ -1,4 +1,5 @@
 import random
+from typing import Callable
 
 import numpy as np
 
@@ -444,3 +445,31 @@ class Empirical_probability:
         for data_point in data:
             variance += (mean - data_point) ** 2
         return variance / n
+
+class sampling:
+    def get_sample(N:int,inverted_distribution:Callable) -> list:
+        """Will get a sample of size N using the uniform CDF method.
+        i.e we generate a sample based on the inverse of the CDF in
+        question.
+
+        Parameters
+        ----------
+        N : int
+            Number of samples
+        inverted_distribution : Callable
+            The inverse of the distribution you need to sample from,
+            hint: use the invert_scalar function from Functions.
+
+        Returns
+        -------
+        list
+            A sample that follows the distribution.
+        """
+        sample = []
+        count = 1
+        while count < N:
+            random_probability = np.random.uniform(0,1)
+            output = inverted_distribution(random_probability)
+            sample.append(output)
+            count += 1
+        return sample
