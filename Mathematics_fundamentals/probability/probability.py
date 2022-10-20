@@ -2,6 +2,7 @@ import random
 from typing import Callable
 
 import numpy as np
+from scipy.stats import norm
 
 from Mathematics_fundamentals.calculus.integration.integration import \
     Integration
@@ -180,6 +181,26 @@ class Probability:
             variance=1,
             x = standardised_import
         )
+
+    @staticmethod
+    def inverse_normal(mean:float,variance:float,p:float) -> float:
+        """ If we have some probability p in the range [0,1] we can find
+        the corresponding value, x such that the probability that the normal
+        variable is <= x is p.
+
+        Parameters
+        ----------
+        mean : float
+        variance : float
+        p : float
+            Probability in the range [0,1]
+
+        Returns
+        -------
+        float
+            Corresponding value to the probability
+        """
+        return np.sqrt(variance) * norm.ppf(p) + mean
     
     @staticmethod 
     def geometric_pdf(probability:float,x:int) -> float:
