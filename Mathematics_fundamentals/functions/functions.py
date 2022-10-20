@@ -1,4 +1,7 @@
+from typing import Callable
+
 import numpy as np
+import scipy.optimize as optimise
 
 from Mathematics_fundamentals.numbers.numbers import Complex
 
@@ -96,3 +99,21 @@ class Functions:
     def elipse(x, major, minor):
         y_co_ordinate = major * np.sqrt(1 - (x / minor) ** 2)
         return [-y_co_ordinate, y_co_ordinate]
+
+    @staticmethod
+    def get_scalar_inverse(a:float,function:Callable) -> float:
+        """Will return the inverse value of a function at the point x,
+        so if f(x) = a, then this function will find x.
+
+        Parameters
+        ----------
+        a : float
+        function : Callable
+
+        Returns
+        ----------
+            float
+        """
+        minimising_function = lambda x: (function(x) - a) ** 2
+        return optimise.minimize_scalar(minimising_function)['x']
+
